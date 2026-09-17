@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ESSENCE LUXE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#C9A86A',
+                        'gold-dark': '#B8945A',
+                        cream: '#FDFBF7',
+                        'cream-dark': '#F5F0E8',
+                        beige: '#E8DDD0',
+                        'black-luxe': '#0A0A0A',
+                        'charcoal': '#1A1A1A',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #FDFBF7; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .scrollbar-thin::-webkit-scrollbar { width: 5px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #F5F0E8; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #C9A86A; border-radius: 3px; }
+        .input-field {
+            width: 100%;
+            border: 1px solid #E8DDD0;
+            background: white;
+            padding: 0.75rem 1rem;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus { border-color: #0A0A0A; }
+        .label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(0,0,0,0.5); margin-bottom: 0.5rem; display: block; font-weight: 500; }
+    </style>
+</head>
+<body class="bg-cream text-black-luxe">
+
+    <!-- LOGIN VIEW -->
+    <div id="login-view" class="min-h-screen flex items-center justify-center p-6 bg-black-luxe">
+        <div class="w-full max-w-[440px]">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-cream flex items-center justify-center">
+                        <span class="font-serif text-black-luxe text-[24px] font-bold">E</span>
+                    </div>
+                    <div class="text-left">
+                        <h1 class="font-serif text-cream text-[22px] font-bold tracking-[0.2em] leading-none">ESSENCE</h1>
+                        <p class="text-[9px] tracking-[0.3em] text-gold font-medium">ADMIN PORTAL</p>
+                    </div>
+                </div>
+                <h2 class="font-serif text-[32px] text-cream font-light mb-2">Welcome Back</h2>
+                <p class="text-cream/60 text-[13px] font-light">Sign in to manage your luxury boutique</p>
+            </div>
+
+            <div class="bg-cream p-8 lg:p-10">
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label class="label">Email Address</label>
+                        <input id="login-email" type="email" required placeholder="admin@essenceluxe.ng" class="input-field">
+                    </div>
+                    <div>
+                        <label class="label">Password</label>
+                        <input id="login-password" type="password" required placeholder="••••••••" class="input-field">
+                    </div>
+                    <div id="login-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-[13px]"></div>
+                    <button type="submit" class="w-full bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-charcoal transition-colors">Sign In</button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-beige">
+                    <p class="text-[11px] text-black/50 tracking-wide text-center">Demo Credentials for Testing</p>
+                    <div class="mt-3 bg-cream-dark p-3 text-[12px] font-mono text-black/70 text-center">
+                        admin@essenceluxe.ng / Essence2025
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <a href="index.html" class="text-[11px] tracking-[0.2em] uppercase text-black/50 hover:text-black-luxe">← Back to Store</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="hidden min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="w-[280px] bg-black-luxe text-cream flex flex-col fixed h-screen z-30 hidden lg:flex">
+            <div class="p-8 border-b border-cream/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-cream flex items-center justify-center">
+                        <span class="font-serif text-black-luxe text-[20px] font-bold">E</span>
+                    </div>
+                    <div>
+                        <h1 class="font-serif text-[18px] font-bold tracking-[0.2em] leading-none">ESSENCE</h1>
+                        <p class="text-[8px] tracking-[0.3em] text-gold">LUXE ADMIN</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-6 space-y-1 overflow-auto scrollbar-thin">
+                <button data-view="overview" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 bg-cream text-black-luxe">
+                    <span>◫</span> Overview
+                </button>
+                <button data-view="products" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
+                    <span>◫</span> Products
+                </button>
+                <button data-view="homepage" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
+                    <span>◫</span> Homepage
+                </button>
+                <button data-view="reviews" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
+                    <span>◫</span> Reviews
+                </button>
+                <button data-view="contact" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
+                    <span>◫</span> Contact & WhatsApp
+                </button>
+                <button data-view="images" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
+                    <span>◫</span> Image Library
+                </button>
+            </nav>
+
+            <div class="p-6 border-t border-cream/10 space-y-3">
+                <a href="index.html" target="_blank" class="block w-full border border-cream/20 text-cream py-3 text-[11px] tracking-[0.2em] uppercase text-center hover:bg-cream hover:text-black-luxe transition-colors">View Store →</a>
+                <button id="logout-btn" class="w-full bg-cream/10 text-cream/70 py-3 text-[11px] tracking-[0.2em] uppercase hover:bg-cream/20 transition-colors">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Mobile Header -->
+        <div class="lg:hidden fixed top-0 left-0 right-0 bg-black-luxe text-cream z-40 flex items-center justify-between p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-cream flex items-center justify-center"><span class="font-serif text-black-luxe font-bold">E</span></div>
+                <span class="font-serif tracking-[0.2em] text-[14px]">ESSENCE ADMIN</span>
+            </div>
+            <button id="mobile-sidebar-toggle" class="w-10 h-10 border border-cream/20 flex items-center justify-center">☰</button>
+        </div>
+
+        <!-- Mobile Sidebar -->
+        <div id="mobile-sidebar" class="lg:hidden fixed inset-0 z-50 hidden">
+            <div class="absolute inset-0 bg-black/60" id="mobile-sidebar-overlay"></div>
+            <div class="absolute left-0 top-0 bottom-0 w-[280px] bg-black-luxe p-6 flex flex-col">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="font-serif tracking-[0.2em]">MENU</span>
+                    <button id="mobile-sidebar-close" class="w-8 h-8 border border-cream/20 flex items-center justify-center">✕</button>
+                </div>
+                <nav class="flex-1 space-y-1">
+                    <button data-view="overview" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase bg-cream text-black-luxe">Overview</button>
+                    <button data-view="products" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Products</button>
+                    <button data-view="homepage" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Homepage</button>
+                    <button data-view="reviews" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Reviews</button>
+                    <button data-view="contact" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Contact</button>
+                    <button data-view="images" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Images</button>
+                </nav>
+                <div class="space-y-3 pt-6 border-t border-cream/10">
+                    <a href="index.html" target="_blank" class="block w-full border border-cream/20 py-3 text-[11px] tracking-[0.2em] uppercase text-center">View Store</a>
+                    <button onclick="logout()" class="w-full bg-cream/10 py-3 text-[11px] tracking-[0.2em] uppercase">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-[280px] min-h-screen">
+            <div class="pt-[64px] lg:pt-0">
+                <!-- Overview -->
+                <section id="view-overview" class="view-section p-6 lg:p-10">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-10">
+                        <div>
+                            <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Dashboard</p>
+                            <h1 class="font-serif text-[32px] lg:text-[40px] font-light leading-none">Overview</h1>
+                        </div>
+                        <div class="flex items-center gap-3 text-[12px]">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span class="tracking-wide text-black/60">Live • Store is online • Lagos, NG</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-beige p-[1px] mb-10">
+                        <div class="bg-white p-6 lg:p-8">
+                            <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-2">Total Products</p>
+                            <p id="stat-total" class="font-serif text-[36px] leading-none">0</p>
+                            <p class="text-[12px] text-black/50 mt-2">All fragrances</p>
+                        </div>
+                        <div class="bg-white p-6 lg:p-8">
+                            <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-2">Visible</p>
+                            <p id="stat-visible" class="font-serif text-[36px] leading-none">0</p>
+                            <p class="text-[12px] text-green-600 mt-2">Live on site</p>
+                        </div>
+                        <div class="bg-white p-6 lg:p-8">
+                            <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-2">Featured</p>
+                            <p id="stat-featured" class="font-serif text-[36px] leading-none">0</p>
+                            <p class="text-[12px] text-gold mt-2">Homepage showcase</p>
+                        </div>
+                        <div class="bg-white p-6 lg:p-8">
+                            <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-2">Best Sellers</p>
+                            <p id="stat-bestseller" class="font-serif text-[36px] leading-none">0</p>
+                            <p class="text-[12px] text-black/50 mt-2">Top performing</p>
+                        </div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white border border-beige p-6 lg:p-8">
+                            <h3 class="font-serif text-[20px] mb-6">Recent Products</h3>
+                            <div id="overview-recent-products" class="space-y-3"></div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="bg-black-luxe text-cream p-6 lg:p-8">
+                                <p class="text-gold text-[11px] tracking-[0.3em] uppercase mb-3">Promotion</p>
+                                <p id="overview-promo-status" class="font-serif text-[18px] mb-2">Active</p>
+                                <p id="overview-promo-headline" class="text-cream/60 text-[13px] leading-[1.6] mb-4"></p>
+                                <button data-view="homepage" class="nav-btn text-[11px] tracking-[0.2em] uppercase border border-cream/20 px-4 py-2 hover:bg-cream hover:text-black-luxe transition-colors">Edit Promotion</button>
+                            </div>
+                            <div class="bg-white border border-beige p-6 lg:p-8">
+                                <h4 class="font-serif text-[18px] mb-4">Quick Actions</h4>
+                                <div class="space-y-2">
+                                    <button data-view="products" class="nav-btn w-full text-left px-4 py-3 bg-black-luxe text-cream text-[11px] tracking-[0.2em] uppercase">+ Add New Perfume</button>
+                                    <button data-view="reviews" class="nav-btn w-full text-left px-4 py-3 border border-beige text-[11px] tracking-[0.2em] uppercase hover:border-black-luxe">Manage Reviews</button>
+                                    <button data-view="contact" class="nav-btn w-full text-left px-4 py-3 border border-beige text-[11px] tracking-[0.2em] uppercase hover:border-black-luxe">Update WhatsApp</button>
+                                </div>
+                            </div>
+                            <div class="bg-cream-dark border border-beige p-6">
+                                <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-2">WhatsApp Orders</p>
+                                <p class="font-serif text-[16px] leading-[1.4] mb-3">All orders are handled via WhatsApp. No payment integration.</p>
+                                <p id="overview-whatsapp" class="text-[13px] font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Products -->
+                <section id="view-products" class="view-section hidden p-6 lg:p-10">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+                        <div>
+                            <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Inventory</p>
+                            <h1 class="font-serif text-[32px] lg:text-[40px] font-light">Product Management</h1>
+                        </div>
+                        <button id="add-product-btn" class="bg-black-luxe text-cream px-6 py-3 text-[11px] tracking-[0.2em] uppercase">+ Add New Perfume</button>
+                    </div>
+
+                    <div class="bg-white border border-beige p-4 mb-6 flex flex-col lg:flex-row gap-4">
+                        <input id="product-search" type="text" placeholder="Search products, brands, categories..." class="input-field flex-1">
+                        <select id="product-category-filter" class="input-field lg:w-[200px]">
+                            <option value="all">All Categories</option>
+                            <option>Women's Perfumes</option>
+                            <option>Men's Perfumes</option>
+                            <option>Unisex Fragrances</option>
+                            <option>Perfume Oils</option>
+                            <option>Body Sprays</option>
+                            <option>Gift Sets</option>
+                        </select>
+                        <select id="product-status-filter" class="input-field lg:w-[160px]">
+                            <option value="all">All Status</option>
+                            <option value="visible">Visible Only</option>
+                            <option value="hidden">Hidden Only</option>
+                            <option value="featured">Featured</option>
+                            <option value="bestseller">Best Sellers</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-white border border-beige overflow-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-cream-dark border-b border-beige text-[11px] tracking-[0.2em] uppercase text-black/50">
+                                <tr>
+                                    <th class="p-4 font-medium">Product</th>
+                                    <th class="p-4 font-medium">Category</th>
+                                    <th class="p-4 font-medium">Price (NGN)</th>
+                                    <th class="p-4 font-medium">Stock</th>
+                                    <th class="p-4 font-medium">Status</th>
+                                    <th class="p-4 font-medium text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body" class="text-[13px]"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Homepage Management -->
+                <section id="view-homepage" class="view-section hidden p-6 lg:p-10">
+                    <div class="mb-8">
+                        <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Content</p>
+                        <h1 class="font-serif text-[32px] lg:text-[40px] font-light">Homepage Management</h1>
+                        <p class="text-black/60 text-[14px] mt-2">Update any text, image or banner. Changes reflect instantly on the public site.</p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 space-y-6">
+                            <!-- Hero -->
+                            <div class="bg-white border border-beige p-6 lg:p-8">
+                                <h3 class="font-serif text-[20px] mb-6 flex items-center gap-2"><span class="w-6 h-6 bg-black-luxe text-cream flex items-center justify-center text-[12px]">1</span> Hero Section</h3>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label class="label">Hero Headline (use \n for line breaks)</label>
+                                        <textarea id="edit-hero-headline" rows="3" class="input-field"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="label">Hero Description</label>
+                                        <textarea id="edit-hero-description" rows="3" class="input-field"></textarea>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="label">Button 1 Text</label>
+                                            <input id="edit-hero-btn1" type="text" class="input-field">
+                                        </div>
+                                        <div>
+                                            <label class="label">Button 2 Text</label>
+                                            <input id="edit-hero-btn2" type="text" class="input-field">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="label">Hero Background Image URL</label>
+                                        <input id="edit-hero-image" type="url" class="input-field">
+                                        <div class="mt-3 flex gap-3">
+                                            <input type="file" id="hero-image-file" accept="image/*" class="text-[12px]">
+                                            <span class="text-[11px] text-black/50">or upload image</span>
+                                        </div>
+                                        <img id="preview-hero-image" class="mt-3 w-full h-40 object-cover border border-beige hidden">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Promo Banner -->
+                            <div class="bg-white border border-beige p-6 lg:p-8">
+                                <h3 class="font-serif text-[20px] mb-6 flex items-center gap-2"><span class="w-6 h-6 bg-black-luxe text-cream flex items-center justify-center text-[12px]">2</span> Promotional Banner</h3>
+                                <div class="space-y-5">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input id="edit-promo-visible" type="checkbox" class="w-4 h-4">
+                                        <span class="text-[13px]">Show promotional banner on homepage</span>
+                                    </label>
+                                    <div>
+                                        <label class="label">Promo Headline</label>
+                                        <input id="edit-promo-headline" type="text" class="input-field">
+                                    </div>
+                                    <div>
+                                        <label class="label">Promo Description</label>
+                                        <textarea id="edit-promo-description" rows="2" class="input-field"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="label">Button Text</label>
+                                        <input id="edit-promo-button" type="text" class="input-field">
+                                    </div>
+                                    <div>
+                                        <label class="label">Promo Background Image URL</label>
+                                        <input id="edit-promo-image" type="url" class="input-field">
+                                        <img id="preview-promo-image" class="mt-3 w-full h-32 object-cover border border-beige hidden">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- About -->
+                            <div class="bg-white border border-beige p-6 lg:p-8">
+                                <h3 class="font-serif text-[20px] mb-6 flex items-center gap-2"><span class="w-6 h-6 bg-black-luxe text-cream flex items-center justify-center text-[12px]">3</span> Brand Statement / About</h3>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label class="label">About Headline</label>
+                                        <input id="edit-about-headline" type="text" class="input-field">
+                                    </div>
+                                    <div>
+                                        <label class="label">About Description (paragraphs separated by blank line)</label>
+                                        <textarea id="edit-about-description" rows="6" class="input-field"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Store Info -->
+                            <div class="bg-white border border-beige p-6 lg:p-8">
+                                <h3 class="font-serif text-[20px] mb-6">Store Identity</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="label">Store Name</label>
+                                        <input id="edit-store-name" type="text" class="input-field">
+                                    </div>
+                                    <div>
+                                        <label class="label">Tagline</label>
+                                        <input id="edit-store-tagline" type="text" class="input-field">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="bg-black-luxe text-cream p-6">
+                                <h4 class="font-serif text-[18px] mb-3">Live Preview</h4>
+                                <p class="text-cream/60 text-[13px] leading-[1.6] mb-4">Changes are saved instantly to local storage and reflected on the public site. Open the store in a new tab to verify.</p>
+                                <a href="index.html" target="_blank" class="block w-full bg-cream text-black-luxe py-3 text-[11px] tracking-[0.2em] uppercase text-center">Open Store →</a>
+                            </div>
+                            <div class="bg-white border border-beige p-6">
+                                <h4 class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-4">Collections</h4>
+                                <div id="edit-collections-list" class="space-y-3"></div>
+                                <p class="text-[11px] text-black/40 mt-4">Collections are visual categories. Product counts update automatically.</p>
+                            </div>
+                            <button id="save-homepage-btn" class="w-full bg-gold text-black-luxe py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-gold-dark transition-colors">Save All Changes</button>
+                            <button id="reset-homepage-btn" class="w-full border border-beige py-3 text-[11px] tracking-[0.2em] uppercase">Reset to Defaults</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reviews -->
+                <section id="view-reviews" class="view-section hidden p-6 lg:p-10">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+                        <div>
+                            <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Social Proof</p>
+                            <h1 class="font-serif text-[32px] lg:text-[40px] font-light">Review Management</h1>
+                        </div>
+                        <button id="add-review-btn" class="bg-black-luxe text-cream px-6 py-3 text-[11px] tracking-[0.2em] uppercase">+ Add Review</button>
+                    </div>
+
+                    <div id="reviews-list" class="grid md:grid-cols-2 gap-4"></div>
+                </section>
+
+                <!-- Contact -->
+                <section id="view-contact" class="view-section hidden p-6 lg:p-10">
+                    <div class="mb-8">
+                        <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Settings</p>
+                        <h1 class="font-serif text-[32px] lg:text-[40px] font-light">Contact & WhatsApp Settings</h1>
+                    </div>
+
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white border border-beige p-6 lg:p-8 space-y-6">
+                            <div>
+                                <h3 class="font-serif text-[18px] mb-4">WhatsApp Ordering (Critical)</h3>
+                                <div class="bg-green-50 border border-green-200 p-4 mb-4 text-[13px] text-green-800 leading-[1.6]">
+                                    <strong>Format:</strong> Use international format without + or spaces. Example: 2348012345678 for +234 801 234 5678. This number receives all order messages.
+                                </div>
+                                <div>
+                                    <label class="label">WhatsApp Number (for wa.me link) *</label>
+                                    <input id="edit-whatsapp-number" type="text" placeholder="2348012345678" class="input-field font-mono">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="label">Public Phone Number</label>
+                                    <input id="edit-phone" type="text" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="label">Email Address</label>
+                                    <input id="edit-email" type="email" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="label">Instagram Username</label>
+                                    <input id="edit-instagram" type="text" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="label">Instagram Link</label>
+                                    <input id="edit-instagram-link" type="url" class="input-field">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="label">Store Address</label>
+                                <textarea id="edit-address" rows="2" class="input-field"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="label">Opening Hours</label>
+                                    <input id="edit-hours" type="text" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="label">Google Maps Link</label>
+                                    <input id="edit-maps" type="url" class="input-field">
+                                </div>
+                            </div>
+
+                            <button id="save-contact-btn" class="bg-black-luxe text-cream px-8 py-3 text-[11px] tracking-[0.2em] uppercase">Save Contact Settings</button>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="bg-cream-dark border border-beige p-6">
+                                <h4 class="font-serif text-[16px] mb-3">How WhatsApp Ordering Works</h4>
+                                <div class="text-[13px] leading-[1.7] text-black/70 space-y-2">
+                                    <p>1. Customer clicks "Order on WhatsApp" on any product.</p>
+                                    <p>2. Modal collects quantity, name, phone, delivery location.</p>
+                                    <p>3. Pre-filled message opens in WhatsApp:</p>
+                                    <div class="bg-white border border-beige p-3 font-mono text-[11px] mt-2">
+                                        Hello, I would like to order:<br>
+                                        Product: [Name]<br>
+                                        Brand: [Brand]<br>
+                                        Size: [Size]<br>
+                                        Quantity: [Qty]<br>
+                                        Price: ₦[Price]<br>
+                                        Customer name: [Name]<br>
+                                        Delivery location: [Location]
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white border border-beige p-6">
+                                <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-2">Test WhatsApp</p>
+                                <button onclick="testWhatsApp()" class="w-full bg-[#25D366] text-white py-3 text-[11px] tracking-[0.2em] uppercase">Send Test Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Images -->
+                <section id="view-images" class="view-section hidden p-6 lg:p-10">
+                    <div class="mb-8">
+                        <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Media</p>
+                        <h1 class="font-serif text-[32px] lg:text-[40px] font-light">Image Library</h1>
+                        <p class="text-black/60 text-[14px] mt-2">All product images. Optimized for fast loading. Click to preview.</p>
+                    </div>
+
+                    <div class="bg-white border border-beige p-6 mb-6">
+                        <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                            <div>
+                                <p class="font-serif text-[18px]">Storage Info</p>
+                                <p class="text-[13px] text-black/60">Images are stored as compressed URLs or base64 in browser storage for this demo. In production, use cloud storage.</p>
+                            </div>
+                            <div class="text-[12px] text-black/50">
+                                <span id="image-count">0 images</span> • <span id="image-size">0 KB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="images-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-[1px] bg-beige p-[1px]"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeProductModal()"></div>
+        <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+            <div class="bg-cream w-full max-w-4xl max-h-[90vh] overflow-auto">
+                <div class="sticky top-0 bg-cream border-b border-beige p-6 flex justify-between items-center z-10">
+                    <h3 id="product-modal-title" class="font-serif text-[24px]">Add New Perfume</h3>
+                    <button onclick="closeProductModal()" class="w-10 h-10 border border-beige flex items-center justify-center hover:bg-black-luxe hover:text-cream">✕</button>
+                </div>
+                <form id="product-form" class="p-6 lg:p-8 space-y-6">
+                    <input type="hidden" id="product-id">
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 space-y-5">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2">
+                                    <label class="label">Product Name *</label>
+                                    <input id="p-name" type="text" required class="input-field" placeholder="e.g. Velvet Noir Eau de Parfum">
+                                </div>
+                                <div>
+                                    <label class="label">Brand *</label>
+                                    <input id="p-brand" type="text" required class="input-field" placeholder="e.g. Maison Essence">
+                                </div>
+                                <div>
+                                    <label class="label">Category *</label>
+                                    <select id="p-category" required class="input-field">
+                                        <option value="">Select Category</option>
+                                        <option>Women's Perfumes</option>
+                                        <option>Men's Perfumes</option>
+                                        <option>Unisex Fragrances</option>
+                                        <option>Perfume Oils</option>
+                                        <option>Body Sprays</option>
+                                        <option>Gift Sets</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="label">Size *</label>
+                                    <input id="p-size" type="text" required class="input-field" placeholder="e.g. 100ml">
+                                </div>
+                                <div>
+                                    <label class="label">Fragrance Type</label>
+                                    <input id="p-fragrance-type" type="text" class="input-field" placeholder="e.g. Oriental Floral">
+                                </div>
+                                <div>
+                                    <label class="label">Price (₦) *</label>
+                                    <input id="p-price" type="number" required min="0" class="input-field" placeholder="45000">
+                                </div>
+                                <div>
+                                    <label class="label">Discount Price (₦) - optional</label>
+                                    <input id="p-discount" type="number" min="0" class="input-field" placeholder="38500">
+                                </div>
+                                <div>
+                                    <label class="label">Stock Status *</label>
+                                    <select id="p-stock" required class="input-field">
+                                        <option>In Stock</option>
+                                        <option>Low Stock</option>
+                                        <option>Out of Stock</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="label">Longevity</label>
+                                    <input id="p-longevity" type="text" class="input-field" placeholder="e.g. 8-10 hours">
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="label">Occasion</label>
+                                    <input id="p-occasion" type="text" class="input-field" placeholder="e.g. Evening, Date Night">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="label">Short Description * (for product cards)</label>
+                                <textarea id="p-short-desc" required rows="2" class="input-field" placeholder="Mysterious blend of black rose, vanilla and amber wood."></textarea>
+                            </div>
+                            <div>
+                                <label class="label">Full Description *</label>
+                                <textarea id="p-full-desc" required rows="4" class="input-field" placeholder="Detailed description..."></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="label">Top Notes</label>
+                                    <input id="p-top-notes" type="text" class="input-field" placeholder="Bergamot, Pepper">
+                                </div>
+                                <div>
+                                    <label class="label">Middle Notes</label>
+                                    <input id="p-middle-notes" type="text" class="input-field" placeholder="Rose, Jasmine">
+                                </div>
+                                <div>
+                                    <label class="label">Base Notes</label>
+                                    <input id="p-base-notes" type="text" class="input-field" placeholder="Vanilla, Musk">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-5">
+                            <div>
+                                <label class="label">Product Image *</label>
+                                <div class="border border-dashed border-beige p-4 bg-white">
+                                    <img id="p-image-preview" src="" class="w-full h-48 object-cover border border-beige mb-3 hidden">
+                                    <input id="p-image" type="url" class="input-field mb-3" placeholder="https://... image URL">
+                                    <div class="text-center">
+                                        <p class="text-[11px] text-black/40 mb-2">OR UPLOAD FILE</p>
+                                        <input type="file" id="p-image-file" accept="image/*" class="text-[12px] w-full">
+                                        <p class="text-[10px] text-black/40 mt-2">Max 2MB, optimized automatically</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white border border-beige p-4 space-y-3">
+                                <label class="label">Visibility & Flags</label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input id="p-visible" type="checkbox" checked class="w-4 h-4">
+                                    <span class="text-[13px]">Visible on store (live)</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input id="p-featured" type="checkbox" class="w-4 h-4">
+                                    <span class="text-[13px]">Featured product</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input id="p-bestseller" type="checkbox" class="w-4 h-4">
+                                    <span class="text-[13px]">Best seller badge</span>
+                                </label>
+                            </div>
+
+                            <div class="bg-cream-dark border border-beige p-4 text-[11px] leading-[1.6] text-black/60">
+                                <p class="font-medium text-black/80 mb-1">Tips:</p>
+                                <p>• Use high-quality 800x1000px images</p>
+                                <p>• Price in Naira, no commas</p>
+                                <p>• Discount must be lower than price</p>
+                                <p>• Short desc max 100 chars for best display</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 pt-6 border-t border-beige">
+                        <button type="submit" class="bg-black-luxe text-cream px-8 py-3 text-[11px] tracking-[0.2em] uppercase">Save Product</button>
+                        <button type="button" onclick="closeProductModal()" class="border border-beige px-8 py-3 text-[11px] tracking-[0.2em] uppercase">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
+        <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+            <div class="bg-cream w-full max-w-[520px] p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="review-modal-title" class="font-serif text-[22px]">Add Review</h3>
+                    <button onclick="closeReviewModal()" class="w-8 h-8 border border-beige flex items-center justify-center">✕</button>
+                </div>
+                <form id="review-form" class="space-y-5">
+                    <input type="hidden" id="review-id">
+                    <div>
+                        <label class="label">Customer Name *</label>
+                        <input id="r-name" type="text" required class="input-field" placeholder="e.g. Chioma Adeyemi">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="label">Location</label>
+                            <input id="r-location" type="text" class="input-field" placeholder="e.g. Lekki, Lagos">
+                        </div>
+                        <div>
+                            <label class="label">Rating *</label>
+                            <select id="r-rating" required class="input-field">
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label">Review Text *</label>
+                        <textarea id="r-text" required rows="4" class="input-field" placeholder="Amazing fragrance! ..."></textarea>
+                    </div>
+                    <label class="flex items-center gap-2">
+                        <input id="r-visible" type="checkbox" checked class="w-4 h-4">
+                        <span class="text-[13px]">Visible on site</span>
+                    </label>
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit" class="bg-black-luxe text-cream px-6 py-3 text-[11px] tracking-[0.2em] uppercase">Save Review</button>
+                        <button type="button" onclick="closeReviewModal()" class="border border-beige px-6 py-3 text-[11px] tracking-[0.2em] uppercase">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-[110] hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+            <div class="bg-cream w-full max-w-[400px] p-8 text-center">
+                <div class="w-12 h-12 bg-red-50 border border-red-200 flex items-center justify-center mx-auto mb-4 text-red-600">!</div>
+                <h3 class="font-serif text-[20px] mb-2" id="confirm-title">Are you sure?</h3>
+                <p class="text-[13px] text-black/60 leading-[1.6] mb-6" id="confirm-message">This action cannot be undone.</p>
+                <div class="flex gap-3">
+                    <button id="confirm-cancel" class="flex-1 border border-beige py-3 text-[11px] tracking-[0.2em] uppercase">Cancel</button>
+                    <button id="confirm-ok" class="flex-1 bg-red-600 text-white py-3 text-[11px] tracking-[0.2em] uppercase">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-[200] hidden">
+        <div class="bg-black-luxe text-cream px-6 py-4 text-[13px] shadow-2xl flex items-center gap-3 min-w-[280px]">
+            <div class="w-2 h-2 bg-gold rounded-full animate-pulse flex-shrink-0"></div>
+            <span id="toast-message" class="flex-1">Success</span>
+            <button onclick="hideToast()" class="text-cream/50 hover:text-cream">✕</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== DATA MANAGEMENT (same as index.html) =====
+        const defaultSettings = {
+            storeName: "ESSENCE",
+            storeTagline: "LUXE FRAGRANCES",
+            logoText: "ESSENCE",
+            heroHeadline: "Find Your Signature Scent",
+            heroDescription: "Discover captivating fragrances made to express your unique style. Curated luxury from around the world, delivered to your doorstep in Lagos.",
+            heroBackgroundImage: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=1920&q=80&auto=format&fit=crop",
+            heroButton1Text: "Explore Collection",
+            heroButton2Text: "Order on WhatsApp",
+            promoHeadline: "Your Perfect Scent Is Waiting",
+            promoDescription: "Enjoy up to 20% off on selected luxury fragrances this season. Limited time only.",
+            promoButtonText: "Explore Fragrances",
+            promoVisible: true,
+            promoBackgroundImage: "https://images.unsplash.com/photo-1593487568720-92097fb460fb?w=1920&q=80&auto=format&fit=crop",
+            aboutHeadline: "A Fragrance That Speaks Before You Do",
+            aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
+            whatsappNumber: "2348012345678",
+            phoneNumber: "+234 801 234 5678",
+            email: "hello@essenceluxe.ng",
+            instagram: "@essenceluxe.ng",
+            instagramLink: "https://instagram.com",
+            address: "12 Admiralty Way, Lekki Phase 1, Lagos, Nigeria",
+            openingHours: "Mon - Sat: 9AM - 8PM, Sun: 12PM - 6PM",
+            mapsLink: "https://maps.google.com"
+        };
+
+        const defaultCollections = [
+            { id: 'womens', name: "Women's Perfumes", image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&q=80&auto=format&fit=crop", count: 24 },
+            { id: 'mens', name: "Men's Perfumes", image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&q=80&auto=format&fit=crop", count: 18 },
+            { id: 'unisex', name: "Unisex Fragrances", image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&q=80&auto=format&fit=crop", count: 12 },
+            { id: 'oils', name: "Perfume Oils", image: "https://images.unsplash.com/photo-1600612253971-422e7f7d54eb?w=600&q=80&auto=format&fit=crop", count: 15 },
+            { id: 'sprays', name: "Body Sprays", image: "https://images.unsplash.com/photo-1582211594533-268f4f1edcb9?w=600&q=80&auto=format&fit=crop", count: 10 },
+            { id: 'gifts', name: "Gift Sets", image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80&auto=format&fit=crop", count: 8 }
+        ];
+
+        const defaultProducts = [
+            {
+                id: '1',
+                name: "Velvet Noir Eau de Parfum",
+                brand: "Maison Essence",
+                category: "Women's Perfumes",
+                size: "100ml",
+                price: 45000,
+                discountPrice: 38500,
+                image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Mysterious blend of black rose, vanilla and amber wood.",
+                fullDescription: "Velvet Noir is an intoxicating evening fragrance that captures the essence of Lagos nights. Opening with spicy black pepper and bergamot, it blooms into a heart of black rose and jasmine, settling into a sensual base of Madagascar vanilla, amber wood and white musk. Perfect for the confident woman who commands attention.",
+                fragranceType: "Oriental Floral",
+                topNotes: "Black Pepper, Bergamot, Pink Pepper",
+                middleNotes: "Black Rose, Jasmine Sambac, Iris",
+                baseNotes: "Madagascar Vanilla, Amber Wood, White Musk",
+                longevity: "8-10 hours",
+                occasion: "Evening, Date Night, Special Events",
+                stockStatus: "In Stock",
+                featured: true,
+                bestSeller: true,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '2',
+                name: "Oud Imperial",
+                brand: "Atelier Royale",
+                category: "Men's Perfumes",
+                size: "100ml",
+                price: 68000,
+                discountPrice: null,
+                image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Rich Cambodian oud with leather and smoky incense.",
+                fullDescription: "Oud Imperial is a statement of power and sophistication. Crafted around rare Cambodian oud, this fragrance blends smoky incense, saffron and leather for an intensely masculine signature. The dry-down reveals sandalwood and ambergris that lingers for hours.",
+                fragranceType: "Woody Oriental",
+                topNotes: "Saffron, Cardamom, Bergamot",
+                middleNotes: "Cambodian Oud, Leather, Incense",
+                baseNotes: "Sandalwood, Ambergris, Patchouli",
+                longevity: "10-12 hours",
+                occasion: "Formal, Business, Evening",
+                stockStatus: "In Stock",
+                featured: true,
+                bestSeller: true,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '3',
+                name: "Lumière d'Or",
+                brand: "Lumière Paris",
+                category: "Women's Perfumes",
+                size: "75ml",
+                price: 52000,
+                discountPrice: 45000,
+                image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Radiant citrus, peony and golden musk for daylight elegance.",
+                fullDescription: "Lumière d'Or captures the golden hour in Lagos. Sparkling Italian citrus opens to a heart of fresh peony and orange blossom, resting on a luminous base of golden musk and cedar. Effortlessly elegant for daily wear.",
+                fragranceType: "Floral Citrus",
+                topNotes: "Italian Bergamot, Lemon Zest, Pink Grapefruit",
+                middleNotes: "Peony, Orange Blossom, Rose",
+                baseNotes: "Golden Musk, Cedarwood, White Amber",
+                longevity: "6-8 hours",
+                occasion: "Daily, Office, Brunch",
+                stockStatus: "In Stock",
+                featured: true,
+                bestSeller: false,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '4',
+                name: "Sahara Drift",
+                brand: "Nomad Scents",
+                category: "Unisex Fragrances",
+                size: "100ml",
+                price: 38000,
+                discountPrice: null,
+                image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Warm desert air, fig, and sandalwood — genderless luxury.",
+                fullDescription: "Inspired by the Sahara at sunset, this unisex fragrance blends sun-dried fig, desert sage and creamy sandalwood. A minimalist yet deeply sensual scent that transcends gender and season.",
+                fragranceType: "Woody Aromatic",
+                topNotes: "Fig Leaf, Bergamot, Desert Sage",
+                middleNotes: "Iris, Cedar, Cardamom",
+                baseNotes: "Sandalwood, Musk, Amber",
+                longevity: "7-9 hours",
+                occasion: "Casual, Travel, Everyday Luxury",
+                stockStatus: "In Stock",
+                featured: true,
+                bestSeller: false,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '5',
+                name: "Amber Elixir Oil",
+                brand: "Essence Pure",
+                category: "Perfume Oils",
+                size: "30ml",
+                price: 18500,
+                discountPrice: 15000,
+                image: "https://images.unsplash.com/photo-1600612253971-422e7f7d54eb?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Concentrated perfume oil — long-lasting amber vanilla.",
+                fullDescription: "Our best-selling perfume oil. Highly concentrated, alcohol-free formula that lasts 12+ hours on skin. Warm amber, vanilla and tonka bean create an addictive skin scent. A little goes a long way.",
+                fragranceType: "Amber Vanilla",
+                topNotes: "Caramel, Bergamot",
+                middleNotes: "Vanilla Orchid, Tonka Bean",
+                baseNotes: "Amber, Sandalwood, Musk",
+                longevity: "12+ hours",
+                occasion: "Daily, Layering, Intimate",
+                stockStatus: "In Stock",
+                featured: true,
+                bestSeller: true,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '6',
+                name: "Noir Obsession Set",
+                brand: "Maison Essence",
+                category: "Gift Sets",
+                size: "3 x 50ml",
+                price: 75000,
+                discountPrice: 62000,
+                image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Luxury trio — Velvet Noir, Oud Imperial & Lumière d'Or minis.",
+                fullDescription: "The ultimate gift for the fragrance connoisseur. Includes three 50ml luxury minis presented in a handcrafted black and gold box with ribbon. Perfect for birthdays, anniversaries or self-indulgence.",
+                fragranceType: "Gift Collection",
+                topNotes: "Varied",
+                middleNotes: "Varied",
+                baseNotes: "Varied",
+                longevity: "Varies",
+                occasion: "Gifting, Collection",
+                stockStatus: "In Stock",
+                featured: true,
+                bestSeller: true,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '7',
+                name: "Citrus Verve Body Mist",
+                brand: "Fresh & Co",
+                category: "Body Sprays",
+                size: "200ml",
+                price: 8500,
+                discountPrice: null,
+                image: "https://images.unsplash.com/photo-1582211594533-268f4f1edcb9?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Energizing citrus and mint — perfect for Lagos heat.",
+                fullDescription: "Light, refreshing body spray with energizing notes of citrus, mint and green tea. Ideal for refreshing after gym or layering under your main fragrance. Dermatologically tested.",
+                fragranceType: "Citrus Fresh",
+                topNotes: "Lime, Mint, Grapefruit",
+                middleNotes: "Green Tea, Jasmine",
+                baseNotes: "White Musk, Cedar",
+                longevity: "3-4 hours",
+                occasion: "Gym, Casual, Layering",
+                stockStatus: "In Stock",
+                featured: false,
+                bestSeller: false,
+                visible: true,
+                createdAt: Date.now()
+            },
+            {
+                id: '8',
+                name: "Midnight Oud",
+                brand: "Atelier Royale",
+                category: "Men's Perfumes",
+                size: "100ml",
+                price: 59000,
+                discountPrice: null,
+                image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&q=80&auto=format&fit=crop",
+                shortDescription: "Dark, magnetic oud with tobacco and vanilla.",
+                fullDescription: "Midnight Oud is for the man who owns the night. Dark Cambodian oud meets smoky tobacco and sweet vanilla for a deeply seductive and powerful trail. Unforgettable.",
+                fragranceType: "Woody Spicy",
+                topNotes: "Tobacco, Black Pepper",
+                middleNotes: "Oud, Cinnamon, Leather",
+                baseNotes: "Vanilla, Amber, Patchouli",
+                longevity: "9-11 hours",
+                occasion: "Nightlife, Date, Luxury Events",
+                stockStatus: "Low Stock",
+                featured: true,
+                bestSeller: false,
+                visible: true,
+                createdAt: Date.now()
+            }
+        ];
+
+        const defaultReviews = [
+            { id: '1', customerName: "Chioma Adeyemi", location: "Lekki, Lagos", rating: 5, text: "Velvet Noir is absolutely divine! I get compliments everywhere I go. Delivery was same day and packaging was so luxurious. Essence Luxe is now my only perfume plug.", visible: true, createdAt: Date.now() },
+            { id: '2', customerName: "Tunde Okonkwo", location: "Ikoyi, Lagos", rating: 5, text: "Oud Imperial lasts all day and smells incredibly premium. Authentic fragrance, not those watered-down versions. WhatsApp ordering was super smooth.", visible: true, createdAt: Date.now() },
+            { id: '3', customerName: "Amara N.", location: "Abuja", rating: 5, text: "The gift set was perfect for my sister's birthday. She cried! Beautiful box, amazing scents. Will definitely order again. Thank you Essence Luxe!", visible: true, createdAt: Date.now() },
+            { id: '4', customerName: "David E.", location: "VI, Lagos", rating: 4, text: "Sahara Drift is my signature now. Unisex but leans masculine in the best way. Great customer service on WhatsApp, they helped me choose.", visible: true, createdAt: Date.now() },
+            { id: '5', customerName: "Zainab M.", location: "Yaba, Lagos", rating: 5, text: "Amber oil is a game changer! Small bottle but lasts forever and the scent is so intimate and warm. Perfect for layering. 10/10!", visible: true, createdAt: Date.now() },
+            { id: '6', customerName: "Emeka K.", location: "Port Harcourt", rating: 5, text: "Fast delivery to PH, well packaged. Midnight Oud is exactly as described - dark and magnetic. My new go-to for evenings.", visible: true, createdAt: Date.now() }
+        ];
+
+        function getSettings() {
+            const stored = localStorage.getItem('essence_settings');
+            return stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
+        }
+        function saveSettings(s) {
+            localStorage.setItem('essence_settings', JSON.stringify(s));
+        }
+        function getProducts() {
+            const stored = localStorage.getItem('essence_products');
+            if (!stored) {
+                localStorage.setItem('essence_products', JSON.stringify(defaultProducts));
+                return defaultProducts;
+            }
+            return JSON.parse(stored);
+        }
+        function saveProducts(p) {
+            localStorage.setItem('essence_products', JSON.stringify(p));
+        }
+        function getReviews() {
+            const stored = localStorage.getItem('essence_reviews');
+            if (!stored) {
+                localStorage.setItem('essence_reviews', JSON.stringify(defaultReviews));
+                return defaultReviews;
+            }
+            return JSON.parse(stored);
+        }
+        function saveReviews(r) {
+            localStorage.setItem('essence_reviews', JSON.stringify(r));
+        }
+        function getCollections() {
+            const stored = localStorage.getItem('essence_collections');
+            if (!stored) {
+                localStorage.setItem('essence_collections', JSON.stringify(defaultCollections));
+                return defaultCollections;
+            }
+            return JSON.parse(stored);
+        }
+        function saveCollections(c) {
+            localStorage.setItem('essence_collections', JSON.stringify(c));
+        }
+
+        // ===== AUTH =====
+        function checkAuth() {
+            const logged = localStorage.getItem('essence_admin_logged') === 'true';
+            const loginView = document.getElementById('login-view');
+            const dashView = document.getElementById('dashboard-view');
+            if (logged) {
+                loginView.classList.add('hidden');
+                dashView.classList.remove('hidden');
+                initDashboard();
+            } else {
+                loginView.classList.remove('hidden');
+                dashView.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+            
+            // Demo credentials
+            if (email === 'admin@essenceluxe.ng' && pass === 'Essence2025') {
+                localStorage.setItem('essence_admin_logged', 'true');
+                errorEl.classList.add('hidden');
+                checkAuth();
+                showToast('Welcome back! Dashboard loaded.');
+            } else {
+                errorEl.textContent = 'Invalid credentials. Use demo: admin@essenceluxe.ng / Essence2025';
+                errorEl.classList.remove('hidden');
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('essence_admin_logged');
+            checkAuth();
+            showToast('Logged out successfully');
+        }
+        document.getElementById('logout-btn').addEventListener('click', logout);
+
+        // ===== NAVIGATION =====
+        function switchView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-cream', 'text-black-luxe');
+                btn.classList.add('text-cream/60');
+                if (btn.dataset.view === viewName) {
+                    btn.classList.add('bg-cream', 'text-black-luxe');
+                    btn.classList.remove('text-cream/60');
+                }
+            });
+            document.querySelectorAll('.nav-btn-mobile').forEach(btn => {
+                btn.classList.remove('bg-cream', 'text-black-luxe');
+                btn.classList.add('text-cream/60');
+                if (btn.dataset.view === viewName) {
+                    btn.classList.add('bg-cream', 'text-black-luxe');
+                    btn.classList.remove('text-cream/60');
+                }
+            });
+
+            // Close mobile sidebar
+            document.getElementById('mobile-sidebar').classList.add('hidden');
+
+            // Load view data
+            if (viewName === 'overview') loadOverview();
+            if (viewName === 'products') loadProductsTable();
+            if (viewName === 'homepage') loadHomepageForm();
+            if (viewName === 'reviews') loadReviewsList();
+            if (viewName === 'contact') loadContactForm();
+            if (viewName === 'images') loadImagesGrid();
+        }
+
+        document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
+            btn.addEventListener('click', () => switchView(btn.dataset.view));
+        });
+
+        // Mobile sidebar toggle
+        document.getElementById('mobile-sidebar-toggle').addEventListener('click', () => {
+            document.getElementById('mobile-sidebar').classList.remove('hidden');
+        });
+        document.getElementById('mobile-sidebar-close').addEventListener('click', () => {
+            document.getElementById('mobile-sidebar').classList.add('hidden');
+        });
+        document.getElementById('mobile-sidebar-overlay').addEventListener('click', () => {
+            document.getElementById('mobile-sidebar').classList.add('hidden');
+        });
+
+        // ===== OVERVIEW =====
+        function loadOverview() {
+            const products = getProducts();
+            const settings = getSettings();
+            document.getElementById('stat-total').textContent = products.length;
+            document.getElementById('stat-visible').textContent = products.filter(p => p.visible).length;
+            document.getElementById('stat-featured').textContent = products.filter(p => p.featured).length;
+            document.getElementById('stat-bestseller').textContent = products.filter(p => p.bestSeller).length;
+            
+            document.getElementById('overview-promo-headline').textContent = settings.promoHeadline;
+            document.getElementById('overview-promo-status').textContent = settings.promoVisible ? 'Active • Live' : 'Hidden';
+            document.getElementById('overview-whatsapp').textContent = settings.phoneNumber + ' (' + settings.whatsappNumber + ')';
+
+            const recent = [...products].sort((a,b) => b.createdAt - a.createdAt).slice(0,5);
+            document.getElementById('overview-recent-products').innerHTML = recent.map(p => `
+                <div class="flex items-center gap-4 p-3 border border-beige hover:bg-cream-dark transition-colors">
+                    <img src="${p.image}" class="w-12 h-12 object-cover">
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-[13px] truncate">${p.name}</p>
+                        <p class="text-[11px] text-black/50">${p.brand} • ₦${(p.discountPrice || p.price).toLocaleString()}</p>
+                    </div>
+                    <span class="text-[10px] px-2 py-1 ${p.visible ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-beige text-black/50'} uppercase">${p.visible ? 'Live' : 'Hidden'}</span>
+                </div>
+            `).join('');
+        }
+
+        // ===== PRODUCTS =====
+        function loadProductsTable() {
+            const search = document.getElementById('product-search').value.toLowerCase();
+            const catFilter = document.getElementById('product-category-filter').value;
+            const statusFilter = document.getElementById('product-status-filter').value;
+            let products = getProducts();
+
+            if (search) {
+                products = products.filter(p => 
+                    p.name.toLowerCase().includes(search) || 
+                    p.brand.toLowerCase().includes(search) ||
+                    p.category.toLowerCase().includes(search)
+                );
+            }
+            if (catFilter !== 'all') {
+                products = products.filter(p => p.category === catFilter);
+            }
+            if (statusFilter !== 'all') {
+                if (statusFilter === 'visible') products = products.filter(p => p.visible);
+                if (statusFilter === 'hidden') products = products.filter(p => !p.visible);
+                if (statusFilter === 'featured') products = products.filter(p => p.featured);
+                if (statusFilter === 'bestseller') products = products.filter(p => p.bestSeller);
+            }
+
+            const tbody = document.getElementById('products-table-body');
+            if (products.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-black/50">No products found matching your filters.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = products.map(p => `
+                <tr class="border-b border-beige hover:bg-cream-dark/50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.image}" class="w-10 h-10 object-cover border border-beige">
+                            <div>
+                                <p class="font-medium text-[13px] leading-tight">${p.name}</p>
+                                <p class="text-[11px] text-black/50">${p.brand} • ${p.size}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-[12px]">${p.category}</td>
+                    <td class="p-4">
+                        <p class="font-medium">₦${(p.discountPrice || p.price).toLocaleString()}</p>
+                        ${p.discountPrice ? `<p class="text-[11px] text-black/40 line-through">₦${p.price.toLocaleString()}</p>` : ''}
+                    </td>
+                    <td class="p-4"><span class="text-[11px] px-2 py-1 border ${p.stockStatus === 'In Stock' ? 'bg-green-50 border-green-200 text-green-700' : p.stockStatus === 'Low Stock' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-red-50 border-red-200 text-red-700'}">${p.stockStatus}</span></td>
+                    <td class="p-4">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] px-2 py-0.5 ${p.visible ? 'bg-black-luxe text-cream' : 'bg-beige text-black/60'} uppercase w-fit">${p.visible ? 'Visible' : 'Hidden'}</span>
+                            <div class="flex gap-1">
+                                ${p.featured ? '<span class="text-[9px] bg-gold/20 text-gold-dark px-1.5 py-0.5 uppercase">Feat</span>' : ''}
+                                ${p.bestSeller ? '<span class="text-[9px] bg-black-luxe text-cream px-1.5 py-0.5 uppercase">Best</span>' : ''}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex justify-end gap-1">
+                            <button onclick="editProduct('${p.id}')" class="w-8 h-8 border border-beige hover:bg-black-luxe hover:text-cream flex items-center justify-center transition-colors" title="Edit">✎</button>
+                            <button onclick="duplicateProduct('${p.id}')" class="w-8 h-8 border border-beige hover:bg-cream-dark flex items-center justify-center transition-colors" title="Duplicate">⎘</button>
+                            <button onclick="deleteProduct('${p.id}')" class="w-8 h-8 border border-red-200 text-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center transition-colors" title="Delete">✕</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('product-search').addEventListener('input', loadProductsTable);
+        document.getElementById('product-category-filter').addEventListener('change', loadProductsTable);
+        document.getElementById('product-status-filter').addEventListener('change', loadProductsTable);
+
+        // Product modal logic
+        const productModal = document.getElementById('product-modal');
+        function openProductModal(isEdit = false) {
+            productModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('product-modal-title').textContent = isEdit ? 'Edit Perfume' : 'Add New Perfume';
+        }
+        function closeProductModal() {
+            productModal.classList.add('hidden');
+            document.body.style.overflow = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('p-image-preview').classList.add('hidden');
+            document.getElementById('product-id').value = '';
+        }
+
+        document.getElementById('add-product-btn').addEventListener('click', () => {
+            document.getElementById('product-form').reset();
+            document.getElementById('p-visible').checked = true;
+            document.getElementById('p-image-preview').classList.add('hidden');
+            openProductModal(false);
+        });
+
+        function editProduct(id) {
+            const p = getProducts().find(prod => prod.id === id);
+            if (!p) return;
+            document.getElementById('product-id').value = p.id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-brand').value = p.brand;
+            document.getElementById('p-category').value = p.category;
+            document.getElementById('p-size').value = p.size;
+            document.getElementById('p-fragrance-type').value = p.fragranceType || '';
+            document.getElementById('p-price').value = p.price;
+            document.getElementById('p-discount').value = p.discountPrice || '';
+            document.getElementById('p-stock').value = p.stockStatus;
+            document.getElementById('p-longevity').value = p.longevity || '';
+            document.getElementById('p-occasion').value = p.occasion || '';
+            document.getElementById('p-short-desc').value = p.shortDescription;
+            document.getElementById('p-full-desc').value = p.fullDescription;
+            document.getElementById('p-top-notes').value = p.topNotes || '';
+            document.getElementById('p-middle-notes').value = p.middleNotes || '';
+            document.getElementById('p-base-notes').value = p.baseNotes || '';
+            document.getElementById('p-image').value = p.image;
+            document.getElementById('p-visible').checked = p.visible;
+            document.getElementById('p-featured').checked = p.featured;
+            document.getElementById('p-bestseller').checked = p.bestSeller;
+            
+            const preview = document.getElementById('p-image-preview');
+            preview.src = p.image;
+            preview.classList.remove('hidden');
+            
+            openProductModal(true);
+        }
+
+        function duplicateProduct(id) {
+            const p = getProducts().find(prod => prod.id === id);
+            if (!p) return;
+            const newProd = { ...p, id: Date.now().toString(), name: p.name + ' (Copy)', createdAt: Date.now() };
+            const products = getProducts();
+            products.push(newProd);
+            saveProducts(products);
+            loadProductsTable();
+            loadOverview();
+            showToast('Product duplicated successfully');
+        }
+
+        function deleteProduct(id) {
+            showConfirm('Delete Perfume?', 'This will permanently delete this perfume from your store. This action cannot be undone.', () => {
+                let products = getProducts();
+                products = products.filter(p => p.id !== id);
+                saveProducts(products);
+                loadProductsTable();
+                loadOverview();
+                showToast('Product deleted');
+            });
+        }
+
+        // Image preview for product
+        document.getElementById('p-image').addEventListener('input', (e) => {
+            const preview = document.getElementById('p-image-preview');
+            if (e.target.value) {
+                preview.src = e.target.value;
+                preview.classList.remove('hidden');
+                preview.onerror = () => preview.classList.add('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('p-image-file').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('Image too large. Max 2MB.', true);
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                document.getElementById('p-image').value = ev.target.result;
+                const preview = document.getElementById('p-image-preview');
+                preview.src = ev.target.result;
+                preview.classList.remove('hidden');
+                showToast('Image uploaded and optimized');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('product-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('product-id').value || Date.now().toString();
+            const isEdit = !!document.getElementById('product-id').value;
+            
+            const price = parseInt(document.getElementById('p-price').value);
+            const discountVal = document.getElementById('p-discount').value;
+            const discountPrice = discountVal ? parseInt(discountVal) : null;
+            
+            if (discountPrice && discountPrice >= price) {
+                showToast('Discount price must be lower than regular price', true);
+                return;
+            }
+
+            const product = {
+                id,
+                name: document.getElementById('p-name').value.trim(),
+                brand: document.getElementById('p-brand').value.trim(),
+                category: document.getElementById('p-category').value,
+                size: document.getElementById('p-size').value.trim(),
+                price,
+                discountPrice,
+                image: document.getElementById('p-image').value.trim(),
+                shortDescription: document.getElementById('p-short-desc').value.trim(),
+                fullDescription: document.getElementById('p-full-desc').value.trim(),
+                fragranceType: document.getElementById('p-fragrance-type').value.trim(),
+                topNotes: document.getElementById('p-top-notes').value.trim(),
+                middleNotes: document.getElementById('p-middle-notes').value.trim(),
+                baseNotes: document.getElementById('p-base-notes').value.trim(),
+                longevity: document.getElementById('p-longevity').value.trim(),
+                occasion: document.getElementById('p-occasion').value.trim(),
+                stockStatus: document.getElementById('p-stock').value,
+                featured: document.getElementById('p-featured').checked,
+                bestSeller: document.getElementById('p-bestseller').checked,
+                visible: document.getElementById('p-visible').checked,
+                createdAt: isEdit ? (getProducts().find(p => p.id === id)?.createdAt || Date.now()) : Date.now()
+            };
+
+            if (!product.image) {
+                showToast('Please provide a product image', true);
+                return;
+            }
+
+            let products = getProducts();
+            if (isEdit) {
+                products = products.map(p => p.id === id ? product : p);
+            } else {
+                products.push(product);
+            }
+            saveProducts(products);
+            closeProductModal();
+            loadProductsTable();
+            loadOverview();
+            loadImagesGrid();
+            showToast(isEdit ? 'Product updated successfully' : 'Product added successfully');
+        });
+
+        // ===== HOMEPAGE =====
+        function loadHomepageForm() {
+            const s = getSettings();
+            const collections = getCollections();
+            document.getElementById('edit-hero-headline').value = s.heroHeadline;
+            document.getElementById('edit-hero-description').value = s.heroDescription;
+            document.getElementById('edit-hero-btn1').value = s.heroButton1Text;
+            document.getElementById('edit-hero-btn2').value = s.heroButton2Text;
+            document.getElementById('edit-hero-image').value = s.heroBackgroundImage;
+            document.getElementById('edit-promo-visible').checked = s.promoVisible;
+            document.getElementById('edit-promo-headline').value = s.promoHeadline;
+            document.getElementById('edit-promo-description').value = s.promoDescription;
+            document.getElementById('edit-promo-button').value = s.promoButtonText;
+            document.getElementById('edit-promo-image').value = s.promoBackgroundImage;
+            document.getElementById('edit-about-headline').value = s.aboutHeadline;
+            document.getElementById('edit-about-description').value = s.aboutDescription;
+            document.getElementById('edit-store-name').value = s.storeName;
+            document.getElementById('edit-store-tagline').value = s.storeTagline;
+
+            // Preview images
+            const heroPreview = document.getElementById('preview-hero-image');
+            heroPreview.src = s.heroBackgroundImage;
+            heroPreview.classList.remove('hidden');
+            const promoPreview = document.getElementById('preview-promo-image');
+            promoPreview.src = s.promoBackgroundImage;
+            promoPreview.classList.remove('hidden');
+
+            // Collections
+            document.getElementById('edit-collections-list').innerHTML = collections.map(c => `
+                <div class="flex items-center gap-3 p-2 border border-beige bg-cream-dark">
+                    <img src="${c.image}" class="w-10 h-10 object-cover">
+                    <div class="flex-1">
+                        <p class="text-[12px] font-medium">${c.name}</p>
+                        <p class="text-[10px] text-black/50">${c.count} products</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('edit-hero-image').addEventListener('input', (e) => {
+            const img = document.getElementById('preview-hero-image');
+            if (e.target.value) {
+                img.src = e.target.value;
+                img.classList.remove('hidden');
+            }
+        });
+        document.getElementById('edit-promo-image').addEventListener('input', (e) => {
+            const img = document.getElementById('preview-promo-image');
+            if (e.target.value) {
+                img.src = e.target.value;
+                img.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('hero-image-file').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                document.getElementById('edit-hero-image').value = ev.target.result;
+                document.getElementById('preview-hero-image').src = ev.target.result;
+                document.getElementById('preview-hero-image').classList.remove('hidden');
+                showToast('Hero image uploaded');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('save-homepage-btn').addEventListener('click', () => {
+            const s = getSettings();
+            s.heroHeadline = document.getElementById('edit-hero-headline').value.trim();
+            s.heroDescription = document.getElementById('edit-hero-description').value.trim();
+            s.heroButton1Text = document.getElementById('edit-hero-btn1').value.trim();
+            s.heroButton2Text = document.getElementById('edit-hero-btn2').value.trim();
+            s.heroBackgroundImage = document.getElementById('edit-hero-image').value.trim();
+            s.promoVisible = document.getElementById('edit-promo-visible').checked;
+            s.promoHeadline = document.getElementById('edit-promo-headline').value.trim();
+            s.promoDescription = document.getElementById('edit-promo-description').value.trim();
+            s.promoButtonText = document.getElementById('edit-promo-button').value.trim();
+            s.promoBackgroundImage = document.getElementById('edit-promo-image').value.trim();
+            s.aboutHeadline = document.getElementById('edit-about-headline').value.trim();
+            s.aboutDescription = document.getElementById('edit-about-description').value.trim();
+            s.storeName = document.getElementById('edit-store-name').value.trim() || 'ESSENCE';
+            s.storeTagline = document.getElementById('edit-store-tagline').value.trim() || 'LUXE FRAGRANCES';
+            
+            saveSettings(s);
+            showToast('Homepage settings saved! Public site updated instantly.');
+            loadOverview();
+        });
+
+        document.getElementById('reset-homepage-btn').addEventListener('click', () => {
+            showConfirm('Reset Homepage?', 'This will reset all homepage content to default values. Are you sure?', () => {
+                localStorage.removeItem('essence_settings');
+                loadHomepageForm();
+                showToast('Homepage reset to defaults');
+            });
+        });
+
+        // ===== REVIEWS =====
+        function loadReviewsList() {
+            const reviews = getReviews();
+            const list = document.getElementById('reviews-list');
+            if (reviews.length === 0) {
+                list.innerHTML = `<div class="col-span-full text-center py-12 text-black/50">No reviews yet.</div>`;
+                return;
+            }
+            list.innerHTML = reviews.map(r => `
+                <div class="bg-white border border-beige p-6 ${!r.visible ? 'opacity-60' : ''}">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex text-gold text-[12px]">${'★'.repeat(r.rating)}<span class="text-beige">${'★'.repeat(5-r.rating)}</span></div>
+                        <span class="text-[10px] px-2 py-1 ${r.visible ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-beige text-black/50'} uppercase">${r.visible ? 'Visible' : 'Hidden'}</span>
+                    </div>
+                    <p class="text-[14px] leading-[1.6] italic mb-4">"${r.text}"</p>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-[13px] font-medium">${r.customerName}</p>
+                            <p class="text-[11px] text-black/50">${r.location || 'Lagos, Nigeria'}</p>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="editReview('${r.id}')" class="w-8 h-8 border border-beige hover:bg-black-luxe hover:text-cream flex items-center justify-center">✎</button>
+                            <button onclick="toggleReviewVisibility('${r.id}')" class="w-8 h-8 border border-beige hover:bg-cream-dark flex items-center justify-center">${r.visible ? '👁' : '🚫'}</button>
+                            <button onclick="deleteReview('${r.id}')" class="w-8 h-8 border border-red-200 text-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center">✕</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Review modal
+        function openReviewModal(isEdit = false) {
+            document.getElementById('review-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('review-modal-title').textContent = isEdit ? 'Edit Review' : 'Add Review';
+        }
+        function closeReviewModal() {
+            document.getElementById('review-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+            document.getElementById('review-form').reset();
+            document.getElementById('review-id').value = '';
+        }
+
+        document.getElementById('add-review-btn').addEventListener('click', () => {
+            document.getElementById('review-form').reset();
+            document.getElementById('r-visible').checked = true;
+            openReviewModal(false);
+        });
+
+        function editReview(id) {
+            const r = getReviews().find(rev => rev.id === id);
+            if (!r) return;
+            document.getElementById('review-id').value = r.id;
+            document.getElementById('r-name').value = r.customerName;
+            document.getElementById('r-location').value = r.location || '';
+            document.getElementById('r-rating').value = r.rating;
+            document.getElementById('r-text').value = r.text;
+            document.getElementById('r-visible').checked = r.visible;
+            openReviewModal(true);
+        }
+
+        function toggleReviewVisibility(id) {
+            let reviews = getReviews();
+            reviews = reviews.map(r => r.id === id ? { ...r, visible: !r.visible } : r);
+            saveReviews(reviews);
+            loadReviewsList();
+            showToast('Review visibility updated');
+        }
+
+        function deleteReview(id) {
+            showConfirm('Delete Review?', 'Permanently delete this review?', () => {
+                let reviews = getReviews();
+                reviews = reviews.filter(r => r.id !== id);
+                saveReviews(reviews);
+                loadReviewsList();
+                showToast('Review deleted');
+            });
+        }
+
+        document.getElementById('review-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('review-id').value || Date.now().toString();
+            const isEdit = !!document.getElementById('review-id').value;
+            const review = {
+                id,
+                customerName: document.getElementById('r-name').value.trim(),
+                location: document.getElementById('r-location').value.trim() || 'Lagos, Nigeria',
+                rating: parseInt(document.getElementById('r-rating').value),
+                text: document.getElementById('r-text').value.trim(),
+                visible: document.getElementById('r-visible').checked,
+                createdAt: isEdit ? (getReviews().find(r => r.id === id)?.createdAt || Date.now()) : Date.now()
+            };
+            let reviews = getReviews();
+            if (isEdit) {
+                reviews = reviews.map(r => r.id === id ? review : r);
+            } else {
+                reviews.push(review);
+            }
+            saveReviews(reviews);
+            closeReviewModal();
+            loadReviewsList();
+            showToast(isEdit ? 'Review updated' : 'Review added');
+        });
+
+        // ===== CONTACT =====
+        function loadContactForm() {
+            const s = getSettings();
+            document.getElementById('edit-whatsapp-number').value = s.whatsappNumber;
+            document.getElementById('edit-phone').value = s.phoneNumber;
+            document.getElementById('edit-email').value = s.email;
+            document.getElementById('edit-instagram').value = s.instagram;
+            document.getElementById('edit-instagram-link').value = s.instagramLink;
+            document.getElementById('edit-address').value = s.address;
+            document.getElementById('edit-hours').value = s.openingHours;
+            document.getElementById('edit-maps').value = s.mapsLink;
+        }
+
+        document.getElementById('save-contact-btn').addEventListener('click', () => {
+            const s = getSettings();
+            const whatsapp = document.getElementById('edit-whatsapp-number').value.trim();
+            if (!whatsapp || !/^\d{10,15}$/.test(whatsapp.replace(/\D/g,''))) {
+                showToast('WhatsApp number must be digits only, e.g. 2348012345678', true);
+                return;
+            }
+            s.whatsappNumber = whatsapp.replace(/\D/g,'');
+            s.phoneNumber = document.getElementById('edit-phone').value.trim();
+            s.email = document.getElementById('edit-email').value.trim();
+            s.instagram = document.getElementById('edit-instagram').value.trim();
+            s.instagramLink = document.getElementById('edit-instagram-link').value.trim();
+            s.address = document.getElementById('edit-address').value.trim();
+            s.openingHours = document.getElementById('edit-hours').value.trim();
+            s.mapsLink = document.getElementById('edit-maps').value.trim();
+            saveSettings(s);
+            showToast('Contact settings saved! WhatsApp ordering updated.');
+            loadOverview();
+        });
+
+        function testWhatsApp() {
+            const s = getSettings();
+            const msg = `Hello ${s.storeName}! This is a test message from the admin dashboard. WhatsApp ordering is working correctly! ✅`;
+            window.open(`https://wa.me/${s.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // ===== IMAGES =====
+        function loadImagesGrid() {
+            const products = getProducts();
+            const grid = document.getElementById('images-grid');
+            const totalSize = JSON.stringify(products).length;
+            document.getElementById('image-count').textContent = `${products.length} images`;
+            document.getElementById('image-size').textContent = `${(totalSize/1024).toFixed(1)} KB total storage`;
+
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white group relative overflow-hidden">
+                    <img src="${p.image}" class="w-full aspect-square object-cover">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+                        <p class="text-cream text-[11px] font-medium truncate">${p.name}</p>
+                        <p class="text-cream/60 text-[10px]">${p.brand}</p>
+                        <div class="flex gap-1 mt-2">
+                            <button onclick="editProduct('${p.id}')" class="flex-1 bg-cream text-black-luxe text-[10px] py-1 uppercase">Edit</button>
+                            <button onclick="deleteProduct('${p.id}')" class="w-6 h-6 bg-red-600 text-white flex items-center justify-center text-[10px]">✕</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== CONFIRM & TOAST =====
+        let confirmCallback = null;
+        function showConfirm(title, message, callback) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            confirmCallback = callback;
+        }
+        document.getElementById('confirm-cancel').addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            confirmCallback = null;
+        });
+        document.getElementById('confirm-ok').addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmCallback) confirmCallback();
+            confirmCallback = null;
+        });
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = msg;
+            toast.querySelector('div').className = `px-6 py-4 text-[13px] shadow-2xl flex items-center gap-3 min-w-[280px] ${isError ? 'bg-red-600 text-white' : 'bg-black-luxe text-cream'}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        }
+        function hideToast() {
+            document.getElementById('toast').classList.add('hidden');
+        }
+
+        // ===== INIT =====
+        function initDashboard() {
+            loadOverview();
+            loadProductsTable();
+            loadHomepageForm();
+            loadReviewsList();
+            loadContactForm();
+            loadImagesGrid();
+            switchView('overview');
+        }
+
+        // Check auth on load
+        checkAuth();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeProductModal();
+                closeReviewModal();
+                document.getElementById('confirm-modal').classList.add('hidden');
+                document.getElementById('mobile-sidebar').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
