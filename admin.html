@@ -762,7 +762,7 @@
             promoVisible: true,
             promoBackgroundImage: "https://images.unsplash.com/photo-1593487568720-92097fb460fb?w=1920&q=80&auto=format&fit=crop",
             aboutHeadline: "A Fragrance That Speaks Before You Do",
-            aboutImage: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80&auto=format&fit=crop",
+            aboutImage: "",
             aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
@@ -1330,9 +1330,8 @@
             document.getElementById('edit-promo-image').value = s.promoBackgroundImage;
             document.getElementById('edit-about-headline').value = s.aboutHeadline;
             document.getElementById('edit-about-description').value = s.aboutDescription;
-            document.getElementById('edit-about-image').value = s.aboutImage || defaultSettings.aboutImage;
-            document.getElementById('preview-about-image').src = s.aboutImage || defaultSettings.aboutImage;
-            document.getElementById('preview-about-image').classList.remove('hidden');
+            document.getElementById('edit-about-image').value = s.aboutImage || '';
+            const aboutPreview = document.getElementById('preview-about-image'); aboutPreview.src = s.aboutImage || ''; aboutPreview.classList.toggle('hidden', !s.aboutImage);
             document.getElementById('edit-store-name').value = s.storeName;
             document.getElementById('edit-store-tagline').value = s.storeTagline;
 
@@ -1395,7 +1394,7 @@
             s.promoBackgroundImage = document.getElementById('edit-promo-image').value.trim();
             s.aboutHeadline = document.getElementById('edit-about-headline').value.trim();
             s.aboutDescription = document.getElementById('edit-about-description').value.trim();
-            s.aboutImage = document.getElementById('edit-about-image').value.trim() || defaultSettings.aboutImage;
+            s.aboutImage = document.getElementById('edit-about-image').value.trim();
             s.storeName = document.getElementById('edit-store-name').value.trim() || 'ESSENCE';
             s.storeTagline = document.getElementById('edit-store-tagline').value.trim() || 'LUXE FRAGRANCES';
             
