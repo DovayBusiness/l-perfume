@@ -253,7 +253,7 @@
     <!-- Brand Statement -->
     <section id="about" class="py-24 lg:py-40 bg-black-luxe text-cream overflow-hidden relative">
         <div class="absolute top-0 right-0 w-[60%] h-full opacity-20 hidden lg:block">
-            <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80&auto=format&fit=crop" class="w-full h-full object-cover">
+            <img id="about-image" src="https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80&auto=format&fit=crop" class="w-full h-full object-cover">
         </div>
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -617,6 +617,7 @@
             promoVisible: true,
             promoBackgroundImage: "https://images.unsplash.com/photo-1593487568720-92097fb460fb?w=1920&q=80&auto=format&fit=crop",
             aboutHeadline: "A Fragrance That Speaks Before You Do",
+            aboutImage: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80&auto=format&fit=crop",
             aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
@@ -941,6 +942,7 @@
             document.getElementById('hero-btn-2').textContent = s.heroButton2Text;
             document.getElementById('hero-bg-image').src = s.heroBackgroundImage;
             document.getElementById('about-headline').innerHTML = s.aboutHeadline.includes('Before You Do') ? s.aboutHeadline.replace('Before You Do', '<span class="text-gold italic font-display font-medium">Before You Do</span>') : s.aboutHeadline;
+            document.getElementById('about-image').src = s.aboutImage || defaultSettings.aboutImage;
             // About description - split paragraphs
             const aboutDesc = document.getElementById('about-description');
             aboutDesc.innerHTML = s.aboutDescription.split('\n').map(p => `<p>${p}</p>`).join('');
