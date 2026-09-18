@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -833,35 +833,14 @@
             { id: '6', customerName: "Emeka K.", location: "Port Harcourt", rating: 5, text: "Fast delivery to PH, well packaged. Midnight Oud is exactly as described - dark and magnetic. My new go-to for evenings.", visible: true, createdAt: Date.now() }
         ];
 
-        // Initialize storage
-        function getSettings() {
-            const stored = localStorage.getItem('essence_settings');
-            return stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
-        }
-        function getProducts() {
-            const stored = localStorage.getItem('essence_products');
-            if (!stored) {
-                localStorage.setItem('essence_products', JSON.stringify(defaultProducts));
-                return defaultProducts;
-            }
-            return JSON.parse(stored);
-        }
-        function getReviews() {
-            const stored = localStorage.getItem('essence_reviews');
-            if (!stored) {
-                localStorage.setItem('essence_reviews', JSON.stringify(defaultReviews));
-                return defaultReviews;
-            }
-            return JSON.parse(stored);
-        }
-        function getCollections() {
-            const stored = localStorage.getItem('essence_collections');
-            if (!stored) {
-                localStorage.setItem('essence_collections', JSON.stringify(defaultCollections));
-                return defaultCollections;
-            }
-            return JSON.parse(stored);
-        }
+        // Supabase-backed shared state with local defaults as a safe fallback.
+        const sb = window.supabase?.createClient(window.REFFIME_SUPABASE_URL, window.REFFIME_SUPABASE_ANON_KEY);
+        let remoteState = null;
+        function getSettings() { const s = remoteState?.settings || JSON.parse(localStorage.getItem('essence_settings') || 'null') || defaultSettings; return { ...defaultSettings, ...s }; }
+        function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
+        function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
+        function getCollections() { return remoteState ? remoteState.collections : (JSON.parse(localStorage.getItem('essence_collections') || 'null') || defaultCollections); }
+        async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderProducts(document.querySelector('.filter-btn.active')?.dataset.filter || 'all'); renderReviews(); } }
 
         // ===== RENDERING =====
         function renderCollections() {
@@ -1209,7 +1188,7 @@
             renderCollections();
             renderProducts('all');
             renderReviews();
-            
+            loadRemoteState();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
             // Listen for storage changes from admin
