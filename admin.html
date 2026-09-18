@@ -80,7 +80,7 @@
                 </form>
 
                 <div class="mt-8 pt-6 border-t border-beige">
-                    <p class="text-[11px] text-black/50 tracking-wide text-center">Demo Credentials for Testing</p>
+                    
                     <div class="mt-3 bg-cream-dark p-3 text-[12px] font-mono text-black/70 text-center">
                         admin@essenceluxe.ng / Essence2025
                     </div>
@@ -513,7 +513,7 @@
                         <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                             <div>
                                 <p class="font-serif text-[18px]">Storage Info</p>
-                                <p class="text-[13px] text-black/60">Images are stored as compressed URLs or base64 in browser storage for this demo. In production, use cloud storage.</p>
+                                <p class="text-[13px] text-black/60">New uploaded images are optimized and stored in Supabase Storage. Existing external image URLs remain supported.</p>
                             </div>
                             <div class="text-[12px] text-black/50">
                                 <span id="image-count">0 images</span> • <span id="image-size">0 KB</span>
@@ -1008,8 +1008,8 @@
         async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) throw error; if (data) remoteState={settings:data.settings||{},products:data.products||[],reviews:data.reviews||[],collections:data.collections||[]}; else { remoteState={settings:getSettings(),products:getProducts(),reviews:getReviews(),collections:getCollections()}; await saveRemoteState(); } }
 
         // ===== AUTH =====
-        async function checkAuth() { const { data } = await sb.auth.getSession(); const logged = data.session && data.session.user.email === 'dovay.business@gmail.com'; const loginView = document.getElementById('login-view'); const dashView = document.getElementById('dashboard-view'); if (logged) { try { await loadRemoteState(); loginView.classList.add('hidden'); dashView.classList.remove('hidden'); initDashboard(); } catch (e) { document.getElementById('login-error').textContent='Database connection failed: '+e.message; document.getElementById('login-error').classList.remove('hidden'); } } else { loginView.classList.remove('hidden'); dashView.classList.add('hidden'); } }
-        document.getElementById('login-form').addEventListener('submit', async (e) => { e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const pass=document.getElementById('login-password').value; const errorEl=document.getElementById('login-error'); const { error }=await sb.auth.signInWithPassword({email,password:pass}); if(error){errorEl.textContent=error.message;errorEl.classList.remove('hidden');return} if(email!=='dovay.business@gmail.com'){await sb.auth.signOut();errorEl.textContent='This account is not authorized as Reffime admin.';errorEl.classList.remove('hidden');return} errorEl.classList.add('hidden'); await checkAuth(); showToast('Welcome back! Dashboard loaded.'); });
+        async function checkAuth() { const { data } = await sb.auth.getSession(); const logged = data.session && data.session.user.email === 'hasan.dhainy91@gmail.com'; const loginView = document.getElementById('login-view'); const dashView = document.getElementById('dashboard-view'); if (logged) { try { await loadRemoteState(); loginView.classList.add('hidden'); dashView.classList.remove('hidden'); initDashboard(); } catch (e) { document.getElementById('login-error').textContent='Database connection failed: '+e.message; document.getElementById('login-error').classList.remove('hidden'); } } else { loginView.classList.remove('hidden'); dashView.classList.add('hidden'); } }
+        document.getElementById('login-form').addEventListener('submit', async (e) => { e.preventDefault(); const email=document.getElementById('login-email').value.trim(); const pass=document.getElementById('login-password').value; const errorEl=document.getElementById('login-error'); const { error }=await sb.auth.signInWithPassword({email,password:pass}); if(error){errorEl.textContent=error.message;errorEl.classList.remove('hidden');return} if(email!=='hasan.dhainy91@gmail.com'){await sb.auth.signOut();errorEl.textContent='This account is not authorized as Reffime admin.';errorEl.classList.remove('hidden');return} errorEl.classList.add('hidden'); await checkAuth(); showToast('Welcome back! Dashboard loaded.'); });
         async function logout(){await sb.auth.signOut();checkAuth();showToast('Logged out successfully')}
         document.getElementById('logout-btn').addEventListener('click', logout);
 
