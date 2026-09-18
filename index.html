@@ -360,7 +360,7 @@
             </div>
             <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-beige p-[1px]">
                 <!-- Reviews injected by JS -->
-            </div>
+            </div><div class="mt-14 max-w-2xl mx-auto border border-beige bg-cream p-8"><p class="text-gold text-[11px] tracking-[0.3em] uppercase mb-3">Share your experience</p><h3 class="font-serif text-[28px] mb-2">Leave a review</h3><p class="text-black/55 text-[13px] mb-6">Reviews are checked before publication. Only approved reviews appear publicly.</p><form id="review-submit-form" class="grid md:grid-cols-2 gap-4"><input id="review-name" required minlength="2" maxlength="80" class="border border-beige bg-white p-3 text-[13px]" placeholder="Your name"><input id="review-location" maxlength="80" class="border border-beige bg-white p-3 text-[13px]" placeholder="City / location"><select id="review-rating" required class="border border-beige bg-white p-3 text-[13px]"><option value="">Rating</option><option value="5">★★★★★ — Excellent</option><option value="4">★★★★ — Very good</option><option value="3">★★★ — Good</option><option value="2">★★ — Fair</option><option value="1">★ — Poor</option></select><textarea id="review-text" required minlength="10" maxlength="1000" class="border border-beige bg-white p-3 text-[13px] md:col-span-2 min-h-[110px]" placeholder="Tell us about your experience"></textarea><button class="bg-black-luxe text-cream px-6 py-3 text-[11px] tracking-[0.2em] uppercase md:col-span-2">Submit for review</button><p id="review-submit-message" class="text-[12px] md:col-span-2 hidden"></p></form></div>
         </div>
     </section>
 
@@ -1172,6 +1172,8 @@
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.add('hidden'), 3000);
         }
+
+        document.getElementById('review-submit-form').addEventListener('submit', async (e) => { e.preventDefault(); const msg=document.getElementById('review-submit-message'); const payload={customer_name:document.getElementById('review-name').value.trim(),location:document.getElementById('review-location').value.trim()||'Lagos, Nigeria',rating:Number(document.getElementById('review-rating').value),review_text:document.getElementById('review-text').value.trim()}; if(!sb){msg.textContent='Reviews are temporarily unavailable.';msg.className='text-[12px] md:col-span-2 text-red-600';return} const {error}=await sb.from('lperfume_review_submissions').insert(payload); if(error){msg.textContent='We could not submit your review. Please try again.';msg.className='text-[12px] md:col-span-2 text-red-600';return} e.target.reset();msg.textContent='Thank you. Your review is pending approval.';msg.className='text-[12px] md:col-span-2 text-green-700'; });
 
         // Intersection Observer for fade-ins
         const observer = new IntersectionObserver((entries) => {
