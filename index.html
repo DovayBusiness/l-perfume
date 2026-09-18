@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script>document.documentElement.classList.add('data-loading');
         tailwind.config = {
             theme: {
                 extend: {
@@ -33,7 +33,7 @@
             }
         }
     </script>
-    <style>
+    <style>html.data-loading body>*{visibility:hidden}html.data-loading:before{content:'Loading Reffime…';position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#101010;color:#efe8dc;font:11px Arial;letter-spacing:.3em;text-transform:uppercase}
         * { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background: #FDFBF7; }
         .font-serif { font-family: 'Playfair Display', serif; }
@@ -840,7 +840,7 @@
         function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
         function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
         function getCollections() { return remoteState ? remoteState.collections : (JSON.parse(localStorage.getItem('essence_collections') || 'null') || defaultCollections); }
-        async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderProducts(document.querySelector('.filter-btn.active')?.dataset.filter || 'all'); renderReviews(); } }
+        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderProducts(document.querySelector('.filter-btn.active')?.dataset.filter || 'all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
 
         // ===== RENDERING =====
         function renderCollections() {
