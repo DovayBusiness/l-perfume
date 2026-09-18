@@ -366,6 +366,9 @@
                                     <div>
                                         <label class="label">About Description (paragraphs separated by blank line)</label>
                                         <textarea id="edit-about-description" rows="6" class="input-field"></textarea>
+                                        <label class="label mt-4">About Image</label>
+                                        <input id="edit-about-image" type="url" class="input-field" placeholder="Image URL"><input type="file" id="about-image-file" accept="image/*" class="text-[12px] mt-2"><span class="text-[11px] text-black/50">Upload an optimized image or use a URL</span>
+                                        <img id="preview-about-image" class="mt-3 w-full h-40 object-cover border border-beige hidden">
                                     </div>
                                 </div>
                             </div>
@@ -759,6 +762,7 @@
             promoVisible: true,
             promoBackgroundImage: "https://images.unsplash.com/photo-1593487568720-92097fb460fb?w=1920&q=80&auto=format&fit=crop",
             aboutHeadline: "A Fragrance That Speaks Before You Do",
+            aboutImage: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&q=80&auto=format&fit=crop",
             aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
@@ -1326,6 +1330,9 @@
             document.getElementById('edit-promo-image').value = s.promoBackgroundImage;
             document.getElementById('edit-about-headline').value = s.aboutHeadline;
             document.getElementById('edit-about-description').value = s.aboutDescription;
+            document.getElementById('edit-about-image').value = s.aboutImage || defaultSettings.aboutImage;
+            document.getElementById('preview-about-image').src = s.aboutImage || defaultSettings.aboutImage;
+            document.getElementById('preview-about-image').classList.remove('hidden');
             document.getElementById('edit-store-name').value = s.storeName;
             document.getElementById('edit-store-tagline').value = s.storeTagline;
 
@@ -1358,11 +1365,10 @@
         });
         document.getElementById('edit-promo-image').addEventListener('input', (e) => {
             const img = document.getElementById('preview-promo-image');
-            if (e.target.value) {
-                img.src = e.target.value;
-                img.classList.remove('hidden');
-            }
+            if (e.target.value) { img.src = e.target.value; img.classList.remove('hidden'); }
         });
+        document.getElementById('edit-about-image').addEventListener('input', (e) => { const img=document.getElementById('preview-about-image'); if(e.target.value){img.src=e.target.value;img.classList.remove('hidden');} });
+        document.getElementById('about-image-file').addEventListener('change', async (e) => { const file=e.target.files[0]; if(!file)return; try { showToast('Uploading About image...'); const url=await uploadSiteImage(file,'about'); document.getElementById('edit-about-image').value=url; document.getElementById('preview-about-image').src=url; document.getElementById('preview-about-image').classList.remove('hidden'); showToast('About image uploaded'); } catch(err){ showToast('Image upload failed: '+err.message,true); e.target.value=''; } });
 
         document.getElementById('hero-image-file').addEventListener('change', async (e) => {
             const file=e.target.files[0]; if(!file)return;
@@ -1389,6 +1395,7 @@
             s.promoBackgroundImage = document.getElementById('edit-promo-image').value.trim();
             s.aboutHeadline = document.getElementById('edit-about-headline').value.trim();
             s.aboutDescription = document.getElementById('edit-about-description').value.trim();
+            s.aboutImage = document.getElementById('edit-about-image').value.trim() || defaultSettings.aboutImage;
             s.storeName = document.getElementById('edit-store-name').value.trim() || 'ESSENCE';
             s.storeTagline = document.getElementById('edit-store-tagline').value.trim() || 'LUXE FRAGRANCES';
             
