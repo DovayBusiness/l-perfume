@@ -413,7 +413,7 @@
                         <button id="add-review-btn" class="bg-black-luxe text-cream px-6 py-3 text-[11px] tracking-[0.2em] uppercase">+ Add Review</button>
                     </div>
 
-                    <div id="reviews-list" class="grid md:grid-cols-2 gap-4"></div>
+                    <div id="pending-reviews" class="mb-8"></div><div id="reviews-list" class="grid md:grid-cols-2 gap-4"></div>
                 </section>
 
                 <!-- Contact -->
@@ -1401,7 +1401,10 @@
         });
 
         // ===== REVIEWS =====
-        function loadReviewsList() {
+        async function loadPendingReviews(){const wrap=document.getElementById('pending-reviews');if(!sb){wrap.innerHTML='';return}const {data,error}=await sb.from('lperfume_review_submissions').select('*').eq('status','pending').order('created_at',{ascending:false});if(error){wrap.innerHTML='<p class="text-red-600 text-[12px]">Could not load pending reviews: '+error.message+'</p>';return}wrap.innerHTML=data?.length?`<div class="border border-gold/40 bg-gold/5 p-5"><h3 class="font-serif text-[22px] mb-4">Pending customer reviews (${data.length})</h3><div class="grid md:grid-cols-2 gap-3">${data.map(r=>`<article class="bg-white border border-beige p-4"><div class="text-gold">${'★'.repeat(r.rating)}<span class="text-beige">${'★'.repeat(5-r.rating)}</span></div><p class="text-[13px] italic my-3">"${r.review_text}"</p><p class="text-[12px] font-medium">${r.customer_name} · ${r.location}</p><div class="flex gap-2 mt-4"><button class="bg-black-luxe text-cream px-3 py-2 text-[10px] uppercase" onclick="approvePendingReview('${r.id}')">Approve</button><button class="border border-red-200 text-red-600 px-3 py-2 text-[10px] uppercase" onclick="rejectPendingReview('${r.id}')">Reject</button></div></article>`).join('')}</div></div>`:''}
+        async function approvePendingReview(id){const {data,error}=await sb.from('lperfume_review_submissions').select('*').eq('id',id).single();if(error){showToast(error.message,true);return}let reviews=getReviews();reviews.push({id:'submitted-'+id,customerName:data.customer_name,location:data.location,rating:data.rating,text:data.review_text,visible:true,verified:true,createdAt:Date.now()});saveReviews(reviews);await sb.from('lperfume_review_submissions').update({status:'approved'}).eq('id',id);loadReviewsList();showToast('Review approved')}
+        async function rejectPendingReview(id){const {error}=await sb.from('lperfume_review_submissions').update({status:'rejected'}).eq('id',id);if(error)showToast(error.message,true);else{loadPendingReviews();showToast('Review rejected')}}
+        function loadReviewsList() { loadPendingReviews();
             const reviews = getReviews();
             const list = document.getElementById('reviews-list');
             if (reviews.length === 0) {
