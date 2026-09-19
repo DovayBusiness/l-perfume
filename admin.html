@@ -370,6 +370,9 @@
                                         <input id="edit-about-image" type="url" class="input-field" placeholder="Image URL"><input type="file" id="about-image-file" accept="image/*" class="text-[12px] mt-2"><span class="text-[11px] text-black/50">Upload an optimized image or use a URL</span>
                                         <img id="preview-about-image" class="mt-3 w-full h-40 object-cover border border-beige hidden">
                                     </div>
+                                    <div class="grid grid-cols-3 gap-3"><div><label class="label">Stat 1 value</label><input id="edit-about-stat1-value" class="input-field"></div><div class="col-span-2"><label class="label">Stat 1 label</label><input id="edit-about-stat1-label" class="input-field"></div><div><label class="label">Stat 2 value</label><input id="edit-about-stat2-value" class="input-field"></div><div class="col-span-2"><label class="label">Stat 2 label</label><input id="edit-about-stat2-label" class="input-field"></div><div><label class="label">Stat 3 value</label><input id="edit-about-stat3-value" class="input-field"></div><div class="col-span-2"><label class="label">Stat 3 label</label><input id="edit-about-stat3-label" class="input-field"></div></div>
+                                    <div><label class="label">About quote</label><input id="edit-about-quote" class="input-field"></div><div><label class="label">Quote author</label><input id="edit-about-quote-author" class="input-field"></div>
+                                    <div><label class="label">Why Choose Us cards (one title and description per line)</label><textarea id="edit-benefits" rows="6" class="input-field"></textarea></div>
                                 </div>
                             </div>
 
@@ -764,6 +767,9 @@
             aboutHeadline: "A Fragrance That Speaks Before You Do",
             aboutImage: "https://images.unsplash.com/photo-1613521140785-e85e427f8002?w=600&q=80&auto=format&fit=crop",
             aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
+            aboutStat1Value: "500+", aboutStat1Label: "Luxury Scents", aboutStat2Value: "98%", aboutStat2Label: "Client Satisfaction", aboutStat3Value: "24H", aboutStat3Label: "Lagos Delivery",
+            aboutQuote: "Perfume is the art that makes memory speak.", aboutQuoteAuthor: "Francis Kurkdjian",
+            benefits: [{title:"Quality Fragrances",description:"100% authentic luxury perfumes sourced directly from authorized distributors."},{title:"Elegant Packaging",description:"Luxury gift-ready packaging that makes every purchase feel special."},{title:"Fast Delivery",description:"Same-day delivery in Lagos, 2-3 days nationwide. Carefully handled."},{title:"WhatsApp Ordering",description:"Simple, secure, and personal. Order directly via WhatsApp in seconds."}],
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
             email: "hello@essenceluxe.ng",
@@ -1330,6 +1336,9 @@
             document.getElementById('edit-promo-image').value = s.promoBackgroundImage;
             document.getElementById('edit-about-headline').value = s.aboutHeadline;
             document.getElementById('edit-about-description').value = s.aboutDescription;
+            ['1','2','3'].forEach(n => { document.getElementById(`edit-about-stat${n}-value`).value=s[`aboutStat${n}Value`]||''; document.getElementById(`edit-about-stat${n}-label`).value=s[`aboutStat${n}Label`]||''; });
+            document.getElementById('edit-about-quote').value=s.aboutQuote||''; document.getElementById('edit-about-quote-author').value=s.aboutQuoteAuthor||'';
+            document.getElementById('edit-benefits').value=(s.benefits||[]).map(b=>`${b.title} | ${b.description}`).join('\n');
             document.getElementById('edit-about-image').value = s.aboutImage || defaultSettings.aboutImage;
             const aboutPreview = document.getElementById('preview-about-image'); aboutPreview.src = s.aboutImage || defaultSettings.aboutImage; aboutPreview.classList.remove('hidden');
             document.getElementById('edit-store-name').value = s.storeName;
@@ -1394,6 +1403,9 @@
             s.promoBackgroundImage = document.getElementById('edit-promo-image').value.trim();
             s.aboutHeadline = document.getElementById('edit-about-headline').value.trim();
             s.aboutDescription = document.getElementById('edit-about-description').value.trim();
+            ['1','2','3'].forEach(n => { s[`aboutStat${n}Value`]=document.getElementById(`edit-about-stat${n}-value`).value.trim(); s[`aboutStat${n}Label`]=document.getElementById(`edit-about-stat${n}-label`).value.trim(); });
+            s.aboutQuote=document.getElementById('edit-about-quote').value.trim(); s.aboutQuoteAuthor=document.getElementById('edit-about-quote-author').value.trim();
+            s.benefits=document.getElementById('edit-benefits').value.split('\n').map(line=>{const [title,...rest]=line.split('|');return {title:(title||'').trim(),description:rest.join('|').trim()};}).filter(b=>b.title&&b.description);
             s.aboutImage = document.getElementById('edit-about-image').value.trim();
             s.storeName = document.getElementById('edit-store-name').value.trim() || 'ESSENCE';
             s.storeTagline = document.getElementById('edit-store-tagline').value.trim() || 'LUXE FRAGRANCES';
