@@ -235,13 +235,14 @@
             </div>
 
             <!-- Category Filter -->
-            <div class="flex flex-wrap justify-center gap-2 mb-12">
-                <button data-filter="all" class="filter-btn active px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase border bg-black-luxe text-cream border-black-luxe">All</button>
-                <button data-filter="Women's Perfumes" class="filter-btn px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase border border-beige hover:border-black-luxe transition-colors">Women's</button>
-                <button data-filter="Men's Perfumes" class="filter-btn px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase border border-beige hover:border-black-luxe transition-colors">Men's</button>
-                <button data-filter="Unisex Fragrances" class="filter-btn px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase border border-beige hover:border-black-luxe transition-colors">Unisex</button>
-                <button data-filter="Perfume Oils" class="filter-btn px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase border border-beige hover:border-black-luxe transition-colors">Oils</button>
-                <button data-filter="Gift Sets" class="filter-btn px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase border border-beige hover:border-black-luxe transition-colors">Gift Sets</button>
+            <div class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-3 mb-12 max-w-3xl mx-auto">
+                <button data-filter="all" class="filter-btn w-full sm:w-auto active px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border bg-black-luxe text-cream border-black-luxe">All</button>
+                <button data-filter="Women's Perfumes" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Women's</button>
+                <button data-filter="Men's Perfumes" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Men's</button>
+                <button data-filter="Unisex Fragrances" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Unisex</button>
+                <button data-filter="Perfume Oils" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Oils</button>
+                <button data-filter="Gift Sets" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Gift Sets</button>
+                <button data-filter="Body Sprays" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Body Sprays</button>
             </div>
 
             <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
@@ -262,6 +263,7 @@
                         <p>Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.</p>
                         <p>We bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.</p>
                     </div>
+                    <a id="about-email" href="mailto:dovay.business@gmail.com" class="inline-block mt-6 text-gold text-[13px] tracking-wide hover:text-cream transition-colors">dovay.business@gmail.com</a>
                     <div class="mt-12 flex gap-12">
                         <div>
                             <p class="font-serif text-[36px] text-gold">500+</p>
@@ -277,7 +279,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative lg:h-[600px] hidden lg:block">
+                <div class="relative h-[420px] sm:h-[520px] lg:h-[600px] mt-10 lg:mt-0">
                     <div class="absolute top-0 right-0 w-[80%] h-[85%] bg-cream-dark p-3">
                         <img id="about-image" src="https://images.unsplash.com/photo-1613521140785-e85e427f8002?w=600&q=80&auto=format&fit=crop" class="w-full h-full object-cover" alt="About our fragrances">
                     </div>
@@ -618,7 +620,7 @@
             aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
-            email: "hello@essenceluxe.ng",
+            email: "dovay.business@gmail.com",
             instagram: "@essenceluxe.ng",
             instagramLink: "https://instagram.com",
             address: "12 Admiralty Way, Lekki Phase 1, Lagos, Nigeria",
@@ -845,7 +847,7 @@
             const collections = getCollections();
             const grid = document.getElementById('collections-grid');
             grid.innerHTML = collections.map((col, i) => `
-                <div class="group relative bg-cream overflow-hidden aspect-[4/3] cursor-pointer card-hover" onclick="filterByCollection('${col.name}')">
+                <div class="collection-card group relative bg-cream overflow-hidden aspect-[4/3] cursor-pointer card-hover" data-category="${col.name}">
                     <img src="${col.image}" alt="${col.name}" class="absolute inset-0 w-full h-full object-cover image-zoom">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute inset-0 p-8 flex flex-col justify-end">
@@ -858,6 +860,7 @@
                     </div>
                 </div>
             `).join('');
+            grid.querySelectorAll('.collection-card').forEach(card => card.addEventListener('click', () => filterByCollection(card.dataset.category)));
         }
 
         function renderProducts(filter = 'all') {
@@ -940,6 +943,8 @@
             document.getElementById('hero-bg-image').src = s.heroBackgroundImage;
             document.getElementById('about-headline').innerHTML = s.aboutHeadline.includes('Before You Do') ? s.aboutHeadline.replace('Before You Do', '<span class="text-gold italic font-display font-medium">Before You Do</span>') : s.aboutHeadline;
             const aboutImage = document.getElementById('about-image'); aboutImage.src = s.aboutImage || defaultSettings.aboutImage;
+            document.getElementById('about-email').textContent = s.email;
+            document.getElementById('about-email').href = `mailto:${s.email}`;
             // About description - split paragraphs
             const aboutDesc = document.getElementById('about-description');
             aboutDesc.innerHTML = s.aboutDescription.split('\n').map(p => `<p>${p}</p>`).join('');
@@ -1142,26 +1147,20 @@
         });
 
         function filterByCollection(categoryName) {
-            // Map collection id to category name
-            const map = {
-                "Women's Perfumes": "Women's Perfumes",
-                "Men's Perfumes": "Men's Perfumes",
-                "Unisex Fragrances": "Unisex Fragrances",
-                "Perfume Oils": "Perfume Oils",
-                "Body Sprays": "Body Sprays",
-                "Gift Sets": "Gift Sets"
-            };
-            const filter = map[categoryName] || 'all';
+            const aliases = { "Women's": "Women's Perfumes", "Men's": "Men's Perfumes", "Unisex": "Unisex Fragrances", "Oils": "Perfume Oils", "Body Spray": "Body Sprays", "Gifts": "Gift Sets" };
+            const filter = aliases[categoryName] || categoryName;
+            const hasProducts = filter === 'all' || getProducts().some(p => p.category === filter);
+            const selectedFilter = hasProducts ? filter : 'all';
             document.querySelectorAll('.filter-btn').forEach(b => {
                 b.classList.remove('active', 'bg-black-luxe', 'text-cream', 'border-black-luxe');
                 b.classList.add('border-beige');
-                if (b.dataset.filter === filter) {
+                if (b.dataset.filter === selectedFilter) {
                     b.classList.add('active', 'bg-black-luxe', 'text-cream', 'border-black-luxe');
                     b.classList.remove('border-beige');
                 }
             });
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => renderProducts(filter), 300);
+            setTimeout(() => renderProducts(selectedFilter), 300);
         }
 
         // Toast
