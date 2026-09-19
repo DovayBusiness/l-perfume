@@ -235,15 +235,7 @@
             </div>
 
             <!-- Category Filter -->
-            <div class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-3 mb-12 max-w-3xl mx-auto">
-                <button data-filter="all" class="filter-btn w-full sm:w-auto active px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border bg-black-luxe text-cream border-black-luxe">All</button>
-                <button data-filter="Women's Perfumes" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Women's</button>
-                <button data-filter="Men's Perfumes" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Men's</button>
-                <button data-filter="Unisex Fragrances" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Unisex</button>
-                <button data-filter="Perfume Oils" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Oils</button>
-                <button data-filter="Gift Sets" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Gift Sets</button>
-                <button data-filter="Body Sprays" class="filter-btn w-full sm:w-auto px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border border-beige hover:border-black-luxe transition-colors">Body Sprays</button>
-            </div>
+            <div id="category-filters" class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-3 mb-12 max-w-3xl mx-auto"></div>
 
             <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
                 <!-- Products injected by JS -->
@@ -266,16 +258,16 @@
                     <a id="about-email" href="mailto:dovay.business@gmail.com" class="inline-block mt-6 text-gold text-[13px] tracking-wide hover:text-cream transition-colors">dovay.business@gmail.com</a>
                     <div class="mt-12 flex gap-12">
                         <div>
-                            <p class="font-serif text-[36px] text-gold">500+</p>
-                            <p class="text-[11px] tracking-[0.2em] uppercase text-cream/60">Luxury Scents</p>
+                            <p id="about-stat1-value" class="font-serif text-[36px] text-gold">500+</p>
+                            <p id="about-stat1-label" class="text-[11px] tracking-[0.2em] uppercase text-cream/60">Luxury Scents</p>
                         </div>
                         <div>
-                            <p class="font-serif text-[36px] text-gold">98%</p>
-                            <p class="text-[11px] tracking-[0.2em] uppercase text-cream/60">Client Satisfaction</p>
+                            <p id="about-stat2-value" class="font-serif text-[36px] text-gold">98%</p>
+                            <p id="about-stat2-label" class="text-[11px] tracking-[0.2em] uppercase text-cream/60">Client Satisfaction</p>
                         </div>
                         <div>
-                            <p class="font-serif text-[36px] text-gold">24H</p>
-                            <p class="text-[11px] tracking-[0.2em] uppercase text-cream/60">Lagos Delivery</p>
+                            <p id="about-stat3-value" class="font-serif text-[36px] text-gold">24H</p>
+                            <p id="about-stat3-label" class="text-[11px] tracking-[0.2em] uppercase text-cream/60">Lagos Delivery</p>
                         </div>
                     </div>
                 </div>
@@ -284,8 +276,8 @@
                         <img id="about-image" src="https://images.unsplash.com/photo-1613521140785-e85e427f8002?w=600&q=80&auto=format&fit=crop" class="w-full h-full object-cover" alt="About our fragrances">
                     </div>
                     <div class="absolute bottom-0 left-0 w-[55%] bg-gold p-8">
-                        <p class="font-serif text-[22px] leading-[1.3] text-black-luxe italic">"Perfume is the art that makes memory speak."</p>
-                        <p class="text-[11px] tracking-[0.2em] uppercase mt-4 text-black-luxe/70">— Francis Kurkdjian</p>
+                        <p id="about-quote" class="font-serif text-[22px] leading-[1.3] text-black-luxe italic">"Perfume is the art that makes memory speak."</p>
+                        <p id="about-quote-author" class="text-[11px] tracking-[0.2em] uppercase mt-4 text-black-luxe/70">— Francis Kurkdjian</p>
                     </div>
                 </div>
             </div>
@@ -300,29 +292,29 @@
                     <div class="w-12 h-12 border border-gold/30 flex items-center justify-center mb-8 group-hover:border-gold transition-colors">
                         <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h3 class="font-serif text-[20px] mb-3">Quality Fragrances</h3>
-                    <p class="text-[14px] leading-[1.7] text-black/60 font-light">100% authentic luxury perfumes sourced directly from authorized distributors.</p>
+                    <h3 class="font-serif text-[20px] mb-3" id="benefit1-title">Quality Fragrances</h3>
+                    <p class="text-[14px] leading-[1.7] text-black/60 font-light" id="benefit1-description">100% authentic luxury perfumes sourced directly from authorized distributors.</p>
                 </div>
                 <div class="bg-cream-dark p-10 lg:p-12 group hover:bg-cream transition-colors duration-500">
                     <div class="w-12 h-12 border border-gold/30 flex items-center justify-center mb-8 group-hover:border-gold transition-colors">
                         <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m0 0l8-4V7"></path></svg>
                     </div>
-                    <h3 class="font-serif text-[20px] mb-3">Elegant Packaging</h3>
-                    <p class="text-[14px] leading-[1.7] text-black/60 font-light">Luxury gift-ready packaging that makes every purchase feel special.</p>
+                    <h3 class="font-serif text-[20px] mb-3" id="benefit2-title">Elegant Packaging</h3>
+                    <p class="text-[14px] leading-[1.7] text-black/60 font-light" id="benefit2-description">Luxury gift-ready packaging that makes every purchase feel special.</p>
                 </div>
                 <div class="bg-cream-dark p-10 lg:p-12 group hover:bg-cream transition-colors duration-500">
                     <div class="w-12 h-12 border border-gold/30 flex items-center justify-center mb-8 group-hover:border-gold transition-colors">
                         <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h3 class="font-serif text-[20px] mb-3">Fast Delivery</h3>
-                    <p class="text-[14px] leading-[1.7] text-black/60 font-light">Same-day delivery in Lagos, 2-3 days nationwide. Carefully handled.</p>
+                    <h3 class="font-serif text-[20px] mb-3" id="benefit3-title">Fast Delivery</h3>
+                    <p class="text-[14px] leading-[1.7] text-black/60 font-light" id="benefit3-description">Same-day delivery in Lagos, 2-3 days nationwide. Carefully handled.</p>
                 </div>
                 <div class="bg-cream-dark p-10 lg:p-12 group hover:bg-cream transition-colors duration-500">
                     <div class="w-12 h-12 border border-gold/30 flex items-center justify-center mb-8 group-hover:border-gold transition-colors">
                         <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                     </div>
-                    <h3 class="font-serif text-[20px] mb-3">WhatsApp Ordering</h3>
-                    <p class="text-[14px] leading-[1.7] text-black/60 font-light">Simple, secure, and personal. Order directly via WhatsApp in seconds.</p>
+                    <h3 class="font-serif text-[20px] mb-3" id="benefit4-title">WhatsApp Ordering</h3>
+                    <p class="text-[14px] leading-[1.7] text-black/60 font-light" id="benefit4-description">Simple, secure, and personal. Order directly via WhatsApp in seconds.</p>
                 </div>
             </div>
         </div>
@@ -618,6 +610,9 @@
             aboutHeadline: "A Fragrance That Speaks Before You Do",
             aboutImage: "https://images.unsplash.com/photo-1613521140785-e85e427f8002?w=600&q=80&auto=format&fit=crop",
             aboutDescription: "At Essence Luxe, we believe fragrance is more than scent — it's identity. Every bottle in our collection is carefully selected for its exceptional quality, longevity, and ability to evoke confidence, elegance, and allure. From the bustling streets of Lagos to intimate evenings, your fragrance should be as unforgettable as you are.\n\nWe bring international luxury to Nigeria, making premium fragrances accessible through seamless WhatsApp ordering and swift delivery across Lagos and beyond.",
+            aboutStat1Value: "500+", aboutStat1Label: "Luxury Scents", aboutStat2Value: "98%", aboutStat2Label: "Client Satisfaction", aboutStat3Value: "24H", aboutStat3Label: "Lagos Delivery",
+            aboutQuote: "Perfume is the art that makes memory speak.", aboutQuoteAuthor: "Francis Kurkdjian",
+            benefits: [{title:"Quality Fragrances",description:"100% authentic luxury perfumes sourced directly from authorized distributors."},{title:"Elegant Packaging",description:"Luxury gift-ready packaging that makes every purchase feel special."},{title:"Fast Delivery",description:"Same-day delivery in Lagos, 2-3 days nationwide. Carefully handled."},{title:"WhatsApp Ordering",description:"Simple, secure, and personal. Order directly via WhatsApp in seconds."}],
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
             email: "dovay.business@gmail.com",
@@ -840,7 +835,7 @@
         function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
         function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
         function getCollections() { return remoteState ? remoteState.collections : (JSON.parse(localStorage.getItem('essence_collections') || 'null') || defaultCollections); }
-        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderProducts(document.querySelector('.filter-btn.active')?.dataset.filter || 'all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
+        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderCategoryFilters(); renderProducts('all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
 
         // ===== RENDERING =====
         function renderCollections() {
@@ -863,6 +858,7 @@
             grid.querySelectorAll('.collection-card').forEach(card => card.addEventListener('click', () => filterByCollection(card.dataset.category)));
         }
 
+        function renderCategoryFilters() { const categories=[...new Set(getProducts().filter(p=>p.visible&&p.category).map(p=>p.category))]; const wrap=document.getElementById('category-filters'); wrap.innerHTML=['all',...categories].map((c,i)=>`<button data-filter="${c}" class="filter-btn w-full sm:w-auto ${i===0?'active bg-black-luxe text-cream border-black-luxe':'border-beige'} px-4 sm:px-6 py-3 text-[10px] sm:text-[11px] tracking-[0.15em] uppercase border hover:border-black-luxe transition-colors">${i===0?'All':c}</button>`).join(''); wrap.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{wrap.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active','bg-black-luxe','text-cream','border-black-luxe'));wrap.querySelectorAll('.filter-btn').forEach(b=>b.classList.add('border-beige'));btn.classList.add('active','bg-black-luxe','text-cream','border-black-luxe');btn.classList.remove('border-beige');renderProducts(btn.dataset.filter);})); }
         function renderProducts(filter = 'all') {
             let products = getProducts().filter(p => p.visible);
             if (filter !== 'all') {
@@ -945,6 +941,9 @@
             const aboutImage = document.getElementById('about-image'); aboutImage.src = s.aboutImage || defaultSettings.aboutImage;
             document.getElementById('about-email').textContent = s.email;
             document.getElementById('about-email').href = `mailto:${s.email}`;
+            ['1','2','3'].forEach(n => { document.getElementById(`about-stat${n}-value`).textContent=s[`aboutStat${n}Value`]; document.getElementById(`about-stat${n}-label`).textContent=s[`aboutStat${n}Label`]; });
+            document.getElementById('about-quote').textContent = `"${s.aboutQuote}"`; document.getElementById('about-quote-author').textContent = `— ${s.aboutQuoteAuthor}`;
+            (s.benefits || []).forEach((b,i) => { const n=i+1; if(document.getElementById(`benefit${n}-title`)){document.getElementById(`benefit${n}-title`).textContent=b.title;document.getElementById(`benefit${n}-description`).textContent=b.description;} });
             // About description - split paragraphs
             const aboutDesc = document.getElementById('about-description');
             aboutDesc.innerHTML = s.aboutDescription.split('\n').map(p => `<p>${p}</p>`).join('');
@@ -1186,6 +1185,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderSettings();
             renderCollections();
+            renderCategoryFilters();
             renderProducts('all');
             renderReviews();
             loadRemoteState();
