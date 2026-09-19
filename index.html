@@ -346,7 +346,7 @@
                     <div class="flex text-gold">
                         <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                     </div>
-                    <p class="text-[13px] tracking-[0.1em] uppercase">4.9/5 from 500+ reviews</p>
+                    <p id="review-summary" class="text-[13px] tracking-[0.1em] uppercase">4.9/5 from 500+ reviews</p>
                 </div>
             </div>
             <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-beige p-[1px]">
@@ -461,7 +461,7 @@
                             <p class="text-[9px] tracking-[0.3em] text-gold font-medium -mt-0.5">LUXE FRAGRANCES</p>
                         </div>
                     </div>
-                    <p class="text-cream/60 text-[14px] leading-[1.8] font-light mb-6">Curating exceptional fragrances for the modern Nigerian. Luxury, authenticity, and elegance delivered to your doorstep.</p>
+                    <p id="footer-description" class="text-cream/60 text-[14px] leading-[1.8] font-light mb-6">Curating exceptional fragrances for the modern Nigerian. Luxury, authenticity, and elegance delivered to your doorstep.</p>
                     <button onclick="openGeneralWhatsApp()" class="bg-gold text-black-luxe px-6 py-3 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-gold-light transition-colors">WhatsApp Us</button>
                 </div>
                 <div>
@@ -476,14 +476,7 @@
                 </div>
                 <div>
                     <h4 class="text-[11px] tracking-[0.3em] uppercase mb-6 text-cream/50">Collections</h4>
-                    <div class="space-y-3 text-[14px] font-light text-cream/70">
-                        <p>Women's Perfumes</p>
-                        <p>Men's Perfumes</p>
-                        <p>Unisex Fragrances</p>
-                        <p>Perfume Oils</p>
-                        <p>Body Sprays</p>
-                        <p>Gift Sets</p>
-                    </div>
+                    <div id="footer-collections" class="space-y-3 text-[14px] font-light text-cream/70"></div>
                 </div>
                 <div>
                     <h4 class="text-[11px] tracking-[0.3em] uppercase mb-6 text-cream/50">Contact</h4>
@@ -506,8 +499,8 @@
                 </div>
             </div>
             <div class="pt-8 border-t border-cream/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-cream/40 font-light">
-                <p>© 2026 ESSENCE LUXE. All rights reserved. Crafted for luxury in Lagos, Nigeria.</p>
-                <p class="tracking-[0.2em] uppercase">Authentic • Luxury • Nigerian</p>
+                <p id="footer-copyright">© 2026 ESSENCE LUXE. All rights reserved. Crafted for luxury in Lagos, Nigeria.</p>
+                <p id="footer-tagline" class="tracking-[0.2em] uppercase">Authentic • Luxury • Nigerian</p>
             </div>
         </div>
     </footer>
@@ -613,6 +606,7 @@
             aboutStat1Value: "500+", aboutStat1Label: "Luxury Scents", aboutStat2Value: "98%", aboutStat2Label: "Client Satisfaction", aboutStat3Value: "24H", aboutStat3Label: "Lagos Delivery",
             aboutQuote: "Perfume is the art that makes memory speak.", aboutQuoteAuthor: "Francis Kurkdjian",
             benefits: [{title:"Quality Fragrances",description:"100% authentic luxury perfumes sourced directly from authorized distributors."},{title:"Elegant Packaging",description:"Luxury gift-ready packaging that makes every purchase feel special."},{title:"Fast Delivery",description:"Same-day delivery in Lagos, 2-3 days nationwide. Carefully handled."},{title:"WhatsApp Ordering",description:"Simple, secure, and personal. Order directly via WhatsApp in seconds."}],
+            reviewSummary: "4.9/5 from 500+ reviews", footerDescription: "Curating exceptional fragrances for the modern Nigerian. Luxury, authenticity, and elegance delivered to your doorstep.", footerCopyright: "© 2026 ESSENCE LUXE. All rights reserved. Crafted for luxury in Lagos, Nigeria.", footerTagline: "Authentic • Luxury • Nigerian",
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
             email: "dovay.business@gmail.com",
@@ -841,6 +835,7 @@
         function renderCollections() {
             const collections = getCollections();
             const grid = document.getElementById('collections-grid');
+            document.getElementById('footer-collections').innerHTML = collections.map(col => `<button class="block text-left hover:text-gold transition-colors" onclick="filterByCollection('${String(col.name).replace(/'/g,"\\'")}')">${col.name}</button>`).join('');
             grid.innerHTML = collections.map((col, i) => `
                 <div class="collection-card group relative bg-cream overflow-hidden aspect-[4/3] cursor-pointer card-hover" data-category="${col.name}">
                     <img src="${col.image}" alt="${col.name}" class="absolute inset-0 w-full h-full object-cover image-zoom">
@@ -944,6 +939,7 @@
             ['1','2','3'].forEach(n => { document.getElementById(`about-stat${n}-value`).textContent=s[`aboutStat${n}Value`]; document.getElementById(`about-stat${n}-label`).textContent=s[`aboutStat${n}Label`]; });
             document.getElementById('about-quote').textContent = `"${s.aboutQuote}"`; document.getElementById('about-quote-author').textContent = `— ${s.aboutQuoteAuthor}`;
             (s.benefits || []).forEach((b,i) => { const n=i+1; if(document.getElementById(`benefit${n}-title`)){document.getElementById(`benefit${n}-title`).textContent=b.title;document.getElementById(`benefit${n}-description`).textContent=b.description;} });
+            document.getElementById('review-summary').textContent=s.reviewSummary; document.getElementById('footer-description').textContent=s.footerDescription; document.getElementById('footer-copyright').textContent=s.footerCopyright; document.getElementById('footer-tagline').textContent=s.footerTagline;
             // About description - split paragraphs
             const aboutDesc = document.getElementById('about-description');
             aboutDesc.innerHTML = s.aboutDescription.split('\n').map(p => `<p>${p}</p>`).join('');
