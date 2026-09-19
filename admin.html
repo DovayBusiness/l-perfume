@@ -388,6 +388,10 @@
                                         <label class="label">Tagline</label>
                                         <input id="edit-store-tagline" type="text" class="input-field">
                                     </div>
+                                    <div class="col-span-2"><label class="label">Review summary</label><input id="edit-review-summary" class="input-field"></div>
+                                    <div class="col-span-2"><label class="label">Footer description</label><textarea id="edit-footer-description" rows="3" class="input-field"></textarea></div>
+                                    <div class="col-span-2"><label class="label">Footer copyright</label><input id="edit-footer-copyright" class="input-field"></div>
+                                    <div class="col-span-2"><label class="label">Footer tagline</label><input id="edit-footer-tagline" class="input-field"></div>
                                 </div>
                             </div>
                         </div>
@@ -770,6 +774,7 @@
             aboutStat1Value: "500+", aboutStat1Label: "Luxury Scents", aboutStat2Value: "98%", aboutStat2Label: "Client Satisfaction", aboutStat3Value: "24H", aboutStat3Label: "Lagos Delivery",
             aboutQuote: "Perfume is the art that makes memory speak.", aboutQuoteAuthor: "Francis Kurkdjian",
             benefits: [{title:"Quality Fragrances",description:"100% authentic luxury perfumes sourced directly from authorized distributors."},{title:"Elegant Packaging",description:"Luxury gift-ready packaging that makes every purchase feel special."},{title:"Fast Delivery",description:"Same-day delivery in Lagos, 2-3 days nationwide. Carefully handled."},{title:"WhatsApp Ordering",description:"Simple, secure, and personal. Order directly via WhatsApp in seconds."}],
+            reviewSummary: "4.9/5 from 500+ reviews", footerDescription: "Curating exceptional fragrances for the modern Nigerian. Luxury, authenticity, and elegance delivered to your doorstep.", footerCopyright: "© 2026 ESSENCE LUXE. All rights reserved. Crafted for luxury in Lagos, Nigeria.", footerTagline: "Authentic • Luxury • Nigerian",
             whatsappNumber: "2348012345678",
             phoneNumber: "+234 801 234 5678",
             email: "hello@essenceluxe.ng",
@@ -1343,6 +1348,7 @@
             const aboutPreview = document.getElementById('preview-about-image'); aboutPreview.src = s.aboutImage || defaultSettings.aboutImage; aboutPreview.classList.remove('hidden');
             document.getElementById('edit-store-name').value = s.storeName;
             document.getElementById('edit-store-tagline').value = s.storeTagline;
+            document.getElementById('edit-review-summary').value=s.reviewSummary||''; document.getElementById('edit-footer-description').value=s.footerDescription||''; document.getElementById('edit-footer-copyright').value=s.footerCopyright||''; document.getElementById('edit-footer-tagline').value=s.footerTagline||'';
 
             // Preview images
             const heroPreview = document.getElementById('preview-hero-image');
@@ -1409,6 +1415,7 @@
             s.aboutImage = document.getElementById('edit-about-image').value.trim();
             s.storeName = document.getElementById('edit-store-name').value.trim() || 'ESSENCE';
             s.storeTagline = document.getElementById('edit-store-tagline').value.trim() || 'LUXE FRAGRANCES';
+            s.reviewSummary=document.getElementById('edit-review-summary').value.trim(); s.footerDescription=document.getElementById('edit-footer-description').value.trim(); s.footerCopyright=document.getElementById('edit-footer-copyright').value.trim(); s.footerTagline=document.getElementById('edit-footer-tagline').value.trim();
             
             saveSettings(s);
             showToast('Homepage settings saved! Public site updated instantly.');
