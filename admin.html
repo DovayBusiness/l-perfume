@@ -398,8 +398,8 @@
                             </div>
                             <div class="bg-white border border-beige p-6">
                                 <h4 class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-4">Collections</h4>
-                                <div id="edit-collections-list" class="space-y-3"></div>
-                                <p class="text-[11px] text-black/40 mt-4">Collections are visual categories. Product counts update automatically.</p>
+                                <div id="edit-collections-list" class="space-y-3"></div><button id="save-collection-images-btn" class="mt-4 bg-black-luxe text-cream px-5 py-3 text-[11px] tracking-[0.2em] uppercase">Save Collection Images</button>
+                                <p class="text-[11px] text-black/40 mt-4">Change each category background image by URL or upload an optimized image.</p>
                             </div>
                             <button id="save-homepage-btn" class="w-full bg-gold text-black-luxe py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-gold-dark transition-colors">Save All Changes</button>
                             <button id="reset-homepage-btn" class="w-full border border-beige py-3 text-[11px] tracking-[0.2em] uppercase">Reset to Defaults</button>
@@ -1354,16 +1354,15 @@
 
             // Collections
             document.getElementById('edit-collections-list').innerHTML = collections.map(c => `
-                <div class="flex items-center gap-3 p-2 border border-beige bg-cream-dark">
-                    <img src="${c.image}" class="w-10 h-10 object-cover">
-                    <div class="flex-1">
-                        <p class="text-[12px] font-medium">${c.name}</p>
-                        <p class="text-[10px] text-black/50">${c.count} products</p>
-                    </div>
+                <div class="p-3 border border-beige bg-cream-dark" data-collection-id="${c.id}">
+                    <div class="flex items-center gap-3"><img src="${c.image}" class="w-14 h-14 object-cover"><div class="flex-1"><p class="text-[12px] font-medium">${c.name}</p><p class="text-[10px] text-black/50">${c.count} products</p></div></div>
+                    <input class="collection-image-url input-field mt-2" data-id="${c.id}" value="${c.image || ''}" placeholder="Image URL"><input type="file" class="collection-image-file text-[12px] mt-2" data-id="${c.id}" accept="image/*">
                 </div>
             `).join('');
         }
 
+        document.getElementById('save-collection-images-btn').addEventListener('click', () => { const cols=getCollections().map(c=>{const input=document.querySelector(`.collection-image-url[data-id="${c.id}"]`);return {...c,image:input?.value.trim()||c.image};}); saveCollections(cols); loadHomepageForm(); showToast('Collection images saved'); });
+        document.getElementById('edit-collections-list').addEventListener('change', async (e) => { if(!e.target.classList.contains('collection-image-file'))return; const file=e.target.files[0]; if(!file)return; try{showToast('Uploading collection image...');const url=await uploadSiteImage(file,'collections');const input=document.querySelector(`.collection-image-url[data-id="${e.target.dataset.id}"]`);input.value=url;showToast('Collection image uploaded; click Save Collection Images');}catch(err){showToast('Image upload failed: '+err.message,true);e.target.value='';} });
         document.getElementById('edit-hero-image').addEventListener('input', (e) => {
             const img = document.getElementById('preview-hero-image');
             if (e.target.value) {
