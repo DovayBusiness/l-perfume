@@ -1355,7 +1355,7 @@
             // Collections
             document.getElementById('edit-collections-list').innerHTML = collections.map(c => `
                 <div class="p-3 border border-beige bg-cream-dark" data-collection-id="${c.id}">
-                    <div class="flex items-center gap-3"><img src="${c.image}" class="w-14 h-14 object-cover"><div class="flex-1"><p class="text-[12px] font-medium">${c.name}</p><p class="text-[10px] text-black/50">${c.count} products</p></div></div>
+                    <div class="flex items-center gap-3"><img src="${c.image}" class="w-14 h-14 object-cover"><div class="flex-1"><p class="text-[12px] font-medium">${c.name}</p><p class="text-[10px] text-black/50">${getProducts().filter(p=>p.category===c.name).length} products</p></div></div>
                     <input class="collection-image-url input-field mt-2" data-id="${c.id}" value="${c.image || ''}" placeholder="Image URL"><input type="file" class="collection-image-file text-[12px] mt-2" data-id="${c.id}" accept="image/*">
                 </div>
             `).join('');
