@@ -1046,7 +1046,14 @@
         async function updateProductRow(p) { const { error } = await sb.from('products').update(productAppToRow(p)).eq('id', p.id).eq('store_id', STORE_ID); if (error) throw error; }
         async function deleteProductRow(id) { const { error } = await sb.from('products').delete().eq('id', id).eq('store_id', STORE_ID); if (error) throw error; }
 
-        async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) throw error; const products = await loadProductsFromDb(); if (data) remoteState={settings:data.settings||{},products,reviews:data.reviews||[],collections:data.collections||[]}; else { remoteState={settings:getSettings(),products,reviews:getReviews(),collections:getCollections()}; await saveRemoteState(); } }
+        let maxProducts = null;
+        async function loadStorePlan() {
+            if (!sb) return;
+            const { data, error } = await sb.from('store_public_flags').select('max_products').eq('store_id', STORE_ID).maybeSingle();
+            if (error) { console.warn('Plan load failed', error); return; }
+            maxProducts = data ? data.max_products : null;
+        }
+        async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) throw error; const products = await loadProductsFromDb(); await loadStorePlan(); if (data) remoteState={settings:data.settings||{},products,reviews:data.reviews||[],collections:data.collections||[]}; else { remoteState={settings:getSettings(),products,reviews:getReviews(),collections:getCollections()}; await saveRemoteState(); } }
 
         // ===== AUTH =====
         async function checkAuth() { const { data } = await sb.auth.getSession(); const logged = data.session && data.session.user.email === ADMIN_EMAIL; const loginView = document.getElementById('login-view'); const dashView = document.getElementById('dashboard-view'); if (logged) { try { await loadRemoteState(); loginView.classList.add('hidden'); dashView.classList.remove('hidden'); initDashboard(); } catch (e) { document.getElementById('login-error').textContent='Database connection failed: '+e.message; document.getElementById('login-error').classList.remove('hidden'); } } else { loginView.classList.remove('hidden'); dashView.classList.add('hidden'); } }
@@ -1254,6 +1261,10 @@
         }
 
         async function duplicateProduct(id) {
+            if (maxProducts !== null && getProducts().length >= maxProducts) {
+                showToast(`You've reached your plan's product limit (${maxProducts}). Contact support to upgrade.`, true);
+                return;
+            }
             const p = getProducts().find(prod => prod.id === id);
             if (!p) return;
             const newProd = { ...p, id: Date.now().toString(), name: p.name + ' (Copy)', createdAt: Date.now() };
@@ -1300,7 +1311,12 @@
             e.preventDefault();
             const id = document.getElementById('product-id').value || Date.now().toString();
             const isEdit = !!document.getElementById('product-id').value;
-            
+
+            if (!isEdit && maxProducts !== null && getProducts().length >= maxProducts) {
+                showToast(`You've reached your plan's product limit (${maxProducts}). Contact support to upgrade.`, true);
+                return;
+            }
+
             const price = parseInt(document.getElementById('p-price').value);
             const discountVal = document.getElementById('p-discount').value;
             const discountPrice = discountVal ? parseInt(discountVal) : null;

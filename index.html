@@ -136,7 +136,7 @@
 
                 <!-- CTA -->
                 <div class="hidden lg:flex items-center gap-4">
-                    <button onclick="openGeneralWhatsApp()" class="bg-black-luxe text-cream px-7 py-3.5 text-[12px] tracking-[0.15em] uppercase font-medium hover:bg-charcoal transition-all duration-300 flex items-center gap-2 group">
+                    <button onclick="openGeneralWhatsApp()" class="whatsapp-order-btn bg-black-luxe text-cream px-7 py-3.5 text-[12px] tracking-[0.15em] uppercase font-medium hover:bg-charcoal transition-all duration-300 flex items-center gap-2 group">
                         <span>Order on WhatsApp</span>
                         <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </button>
@@ -159,7 +159,7 @@
                 <a href="#products" class="mobile-link text-[14px] tracking-[0.2em] uppercase font-medium">Featured Products</a>
                 <a href="#about" class="mobile-link text-[14px] tracking-[0.2em] uppercase font-medium">About</a>
                 <a href="#contact" class="mobile-link text-[14px] tracking-[0.2em] uppercase font-medium">Contact</a>
-                <button onclick="openGeneralWhatsApp()" class="mt-4 bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium">Order on WhatsApp</button>
+                <button onclick="openGeneralWhatsApp()" class="whatsapp-order-btn mt-4 bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium">Order on WhatsApp</button>
                 <div class="pt-6 border-t border-beige flex flex-col gap-2 text-[13px] text-black/60">
                     <p id="mobile-contact-email">hello@essenceluxe.ng</p>
                     <p id="mobile-contact-phone">+234 801 234 5678</p>
@@ -188,7 +188,7 @@
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 fade-in stagger-3">
                     <a href="#products" id="hero-btn-1" class="bg-cream text-black-luxe px-10 py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-white transition-all duration-300 text-center shimmer">Explore Collection</a>
-                    <button onclick="openGeneralWhatsApp()" id="hero-btn-2" class="border border-cream/30 text-cream px-10 py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-cream hover:text-black-luxe transition-all duration-300 backdrop-blur-sm">Order on WhatsApp</button>
+                    <button onclick="openGeneralWhatsApp()" id="hero-btn-2" class="whatsapp-order-btn border border-cream/30 text-cream px-10 py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-cream hover:text-black-luxe transition-all duration-300 backdrop-blur-sm">Order on WhatsApp</button>
                 </div>
                 <div class="mt-16 flex items-center gap-8 fade-in stagger-4">
                     <div class="flex -space-x-3">
@@ -335,7 +335,7 @@
     </section>
 
     <!-- Customer Reviews -->
-    <section class="py-24 lg:py-32 bg-white">
+    <section id="reviews-section" class="py-24 lg:py-32 bg-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-6">
                 <div>
@@ -428,7 +428,7 @@
                         </div>
                     </div>
 
-                    <button onclick="openGeneralWhatsApp()" class="w-full bg-cream text-black-luxe py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-white transition-colors flex items-center justify-center gap-2">
+                    <button onclick="openGeneralWhatsApp()" class="whatsapp-order-btn w-full bg-cream text-black-luxe py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-white transition-colors flex items-center justify-center gap-2">
                         <span>Chat With Us on WhatsApp</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </button>
@@ -462,7 +462,7 @@
                         </div>
                     </div>
                     <p id="footer-description" class="text-cream/60 text-[14px] leading-[1.8] font-light mb-6">Curating exceptional fragrances for the modern Nigerian. Luxury, authenticity, and elegance delivered to your doorstep.</p>
-                    <button onclick="openGeneralWhatsApp()" class="bg-gold text-black-luxe px-6 py-3 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-gold-light transition-colors">WhatsApp Us</button>
+                    <button onclick="openGeneralWhatsApp()" class="whatsapp-order-btn bg-gold text-black-luxe px-6 py-3 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-gold-light transition-colors">WhatsApp Us</button>
                 </div>
                 <div>
                     <h4 class="text-[11px] tracking-[0.3em] uppercase mb-6 text-cream/50">Navigation</h4>
@@ -826,6 +826,20 @@
         const sb = window.supabase?.createClient(window.REFFIME_SUPABASE_URL, window.REFFIME_SUPABASE_ANON_KEY);
         const STORE_ID = window.REFFIME_STORE_ID;
         let remoteState = null;
+        let storeFeatures = { feature_whatsapp: true, feature_reviews: true };
+        async function loadStoreFeatures() {
+            if (!sb) return;
+            const { data, error } = await sb.from('store_public_flags').select('feature_whatsapp, feature_reviews').eq('store_id', STORE_ID).maybeSingle();
+            if (error) { console.warn('Feature flag load failed', error); return; }
+            if (data) storeFeatures = data;
+            if (!storeFeatures.feature_whatsapp) {
+                document.querySelectorAll('.whatsapp-order-btn').forEach(el => el.style.display = 'none');
+            }
+            if (!storeFeatures.feature_reviews) {
+                const reviewsSection = document.getElementById('reviews-section');
+                if (reviewsSection) reviewsSection.style.display = 'none';
+            }
+        }
         function getSettings() { const s = remoteState?.settings || JSON.parse(localStorage.getItem('essence_settings') || 'null') || defaultSettings; return { ...defaultSettings, ...s }; }
         function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
         function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
@@ -900,7 +914,7 @@
                                 <button onclick="openProductModal('${product.id}')" class="w-9 h-9 border border-beige flex items-center justify-center hover:bg-black-luxe hover:text-cream hover:border-black-luxe transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </button>
-                                <button onclick="openWhatsAppOrder('${product.id}')" class="bg-black-luxe text-cream px-4 h-9 text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-charcoal transition-colors">Order</button>
+                                <button onclick="openWhatsAppOrder('${product.id}')" class="whatsapp-order-btn bg-black-luxe text-cream px-4 h-9 text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-charcoal transition-colors">Order</button>
                             </div>
                         </div>
                     </div>
@@ -1023,7 +1037,7 @@
                     </div>
 
                     <div class="flex gap-3">
-                        <button onclick="openWhatsAppOrder('${product.id}'); closeProductModal();" class="flex-1 bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-charcoal transition-colors">Order on WhatsApp</button>
+                        <button onclick="openWhatsAppOrder('${product.id}'); closeProductModal();" class="whatsapp-order-btn flex-1 bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-charcoal transition-colors">Order on WhatsApp</button>
                         <button onclick="closeProductModal()" class="px-8 border border-beige py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:border-black-luxe transition-colors">Close</button>
                     </div>
                 </div>
@@ -1038,6 +1052,7 @@
         }
 
         function openWhatsAppOrder(productId) {
+            if (!storeFeatures.feature_whatsapp) return;
             const product = getProducts().find(p => p.id === productId);
             if (!product) return;
             currentProductForOrder = product;
@@ -1064,6 +1079,7 @@
         }
 
         function openGeneralWhatsApp() {
+            if (!storeFeatures.feature_whatsapp) return;
             const s = getSettings();
             const message = `Hello ${s.storeName} Luxe! 👋\n\nI'm interested in your luxury fragrances. Could you please help me find my perfect scent?\n\nLooking forward to hearing from you!`;
             const url = `https://wa.me/${s.whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -1176,7 +1192,7 @@
             setTimeout(() => toast.classList.add('hidden'), 3000);
         }
 
-        document.getElementById('review-submit-form').addEventListener('submit', async (e) => { e.preventDefault(); const msg=document.getElementById('review-submit-message'); const payload={store_id:STORE_ID,customer_name:document.getElementById('review-name').value.trim(),location:document.getElementById('review-location').value.trim()||'Lagos, Nigeria',rating:Number(document.getElementById('review-rating').value),review_text:document.getElementById('review-text').value.trim()}; if(!sb){msg.textContent='Reviews are temporarily unavailable.';msg.className='text-[12px] md:col-span-2 text-red-600';return} const {error}=await sb.from('lperfume_review_submissions').insert(payload); if(error){msg.textContent='We could not submit your review. Please try again.';msg.className='text-[12px] md:col-span-2 text-red-600';return} e.target.reset();msg.textContent='Thank you. Your review is pending approval.';msg.className='text-[12px] md:col-span-2 text-green-700'; });
+        document.getElementById('review-submit-form').addEventListener('submit', async (e) => { e.preventDefault(); const msg=document.getElementById('review-submit-message'); if(!storeFeatures.feature_reviews){msg.textContent='Reviews are not available for this store.';msg.className='text-[12px] md:col-span-2 text-red-600';msg.classList.remove('hidden');return} const payload={store_id:STORE_ID,customer_name:document.getElementById('review-name').value.trim(),location:document.getElementById('review-location').value.trim()||'Lagos, Nigeria',rating:Number(document.getElementById('review-rating').value),review_text:document.getElementById('review-text').value.trim()}; if(!sb){msg.textContent='Reviews are temporarily unavailable.';msg.className='text-[12px] md:col-span-2 text-red-600';return} const {error}=await sb.from('lperfume_review_submissions').insert(payload); if(error){msg.textContent='We could not submit your review. Please try again.';msg.className='text-[12px] md:col-span-2 text-red-600';return} e.target.reset();msg.textContent='Thank you. Your review is pending approval.';msg.className='text-[12px] md:col-span-2 text-green-700'; });
 
         // Intersection Observer for fade-ins
         const observer = new IntersectionObserver((entries) => {
@@ -1195,6 +1211,7 @@
             renderProducts('all');
             renderReviews();
             loadRemoteState();
+            loadStoreFeatures();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
             // Listen for storage changes from admin
