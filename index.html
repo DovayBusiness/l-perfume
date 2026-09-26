@@ -830,7 +830,16 @@
         function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
         function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
         function getCollections() { return remoteState ? remoteState.collections : (JSON.parse(localStorage.getItem('essence_collections') || 'null') || defaultCollections); }
-        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderCategoryFilters(); renderProducts('all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
+        function productRowToApp(row) {
+            return { id: row.id, name: row.name, brand: row.brand, category: row.category, size: row.size,
+                price: row.price, discountPrice: row.discount_price, image: row.image,
+                shortDescription: row.short_description, fullDescription: row.full_description,
+                fragranceType: row.fragrance_type, topNotes: row.top_notes, middleNotes: row.middle_notes,
+                baseNotes: row.base_notes, longevity: row.longevity, occasion: row.occasion,
+                stockStatus: row.stock_status, featured: row.featured, bestSeller: row.best_seller,
+                visible: row.visible, createdAt: new Date(row.created_at).getTime() };
+        }
+        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } const { data: productRows, error: productsError } = await sb.from('products').select('*').eq('store_id', STORE_ID).order('created_at', { ascending: false }); if (productsError) console.warn('Reffime products load failed', productsError); if (data) { remoteState = { settings: data.settings || {}, products: (productRows || []).map(productRowToApp), reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderCategoryFilters(); renderProducts('all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
 
         // ===== RENDERING =====
         function renderCollections() {

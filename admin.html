@@ -1012,12 +1012,41 @@
         function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
         function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
         function getCollections() { return remoteState ? remoteState.collections : (JSON.parse(localStorage.getItem('essence_collections') || 'null') || defaultCollections); }
-        function saveRemoteState() { if (!sb) return Promise.reject(new Error('Supabase client is not configured')); const s = { id:STORE_ID, settings: remoteState.settings, products: remoteState.products, reviews: remoteState.reviews, collections: remoteState.collections, updated_at: new Date().toISOString() }; return sb.from('lperfume_state').upsert(s).then(({error}) => { if (error) throw error; }); }
+        function saveRemoteState() { if (!sb) return Promise.reject(new Error('Supabase client is not configured')); const s = { id:STORE_ID, settings: remoteState.settings, reviews: remoteState.reviews, collections: remoteState.collections, updated_at: new Date().toISOString() }; return sb.from('lperfume_state').upsert(s).then(({error}) => { if (error) throw error; }); }
         function saveSettings(s) { remoteState = remoteState || { products:getProducts(), reviews:getReviews(), collections:getCollections() }; remoteState.settings = s; localStorage.setItem('essence_settings', JSON.stringify(s)); saveRemoteState().catch(e => showToast('Database save failed: '+e.message, true)); }
-        function saveProducts(p) { remoteState = remoteState || { settings:getSettings(), reviews:getReviews(), collections:getCollections() }; remoteState.products = p; localStorage.setItem('essence_products', JSON.stringify(p)); saveRemoteState().catch(e => showToast('Database save failed: '+e.message, true)); }
         function saveReviews(r) { remoteState = remoteState || { settings:getSettings(), products:getProducts(), collections:getCollections() }; remoteState.reviews = r; localStorage.setItem('essence_reviews', JSON.stringify(r)); saveRemoteState().catch(e => showToast('Database save failed: '+e.message, true)); }
         function saveCollections(c) { remoteState = remoteState || { settings:getSettings(), products:getProducts(), reviews:getReviews() }; remoteState.collections = c; localStorage.setItem('essence_collections', JSON.stringify(c)); saveRemoteState().catch(e => showToast('Database save failed: '+e.message, true)); }
-        async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) throw error; if (data) remoteState={settings:data.settings||{},products:data.products||[],reviews:data.reviews||[],collections:data.collections||[]}; else { remoteState={settings:getSettings(),products:getProducts(),reviews:getReviews(),collections:getCollections()}; await saveRemoteState(); } }
+
+        // ===== PRODUCTS (own table, one row per product, scoped by store_id) =====
+        function productRowToApp(row) {
+            return { id: row.id, name: row.name, brand: row.brand, category: row.category, size: row.size,
+                price: row.price, discountPrice: row.discount_price, image: row.image,
+                shortDescription: row.short_description, fullDescription: row.full_description,
+                fragranceType: row.fragrance_type, topNotes: row.top_notes, middleNotes: row.middle_notes,
+                baseNotes: row.base_notes, longevity: row.longevity, occasion: row.occasion,
+                stockStatus: row.stock_status, featured: row.featured, bestSeller: row.best_seller,
+                visible: row.visible, createdAt: new Date(row.created_at).getTime() };
+        }
+        function productAppToRow(p) {
+            return { id: p.id, store_id: STORE_ID, name: p.name, brand: p.brand, category: p.category, size: p.size,
+                price: p.price, discount_price: p.discountPrice, image: p.image,
+                short_description: p.shortDescription, full_description: p.fullDescription,
+                fragrance_type: p.fragranceType, top_notes: p.topNotes, middle_notes: p.middleNotes,
+                base_notes: p.baseNotes, longevity: p.longevity, occasion: p.occasion,
+                stock_status: p.stockStatus, featured: !!p.featured, best_seller: !!p.bestSeller,
+                visible: !!p.visible, created_at: new Date(p.createdAt || Date.now()).toISOString() };
+        }
+        async function loadProductsFromDb() {
+            if (!sb) return [];
+            const { data, error } = await sb.from('products').select('*').eq('store_id', STORE_ID).order('created_at', { ascending: false });
+            if (error) throw error;
+            return (data || []).map(productRowToApp);
+        }
+        async function insertProductRow(p) { const { error } = await sb.from('products').insert(productAppToRow(p)); if (error) throw error; }
+        async function updateProductRow(p) { const { error } = await sb.from('products').update(productAppToRow(p)).eq('id', p.id).eq('store_id', STORE_ID); if (error) throw error; }
+        async function deleteProductRow(id) { const { error } = await sb.from('products').delete().eq('id', id).eq('store_id', STORE_ID); if (error) throw error; }
+
+        async function loadRemoteState() { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) throw error; const products = await loadProductsFromDb(); if (data) remoteState={settings:data.settings||{},products,reviews:data.reviews||[],collections:data.collections||[]}; else { remoteState={settings:getSettings(),products,reviews:getReviews(),collections:getCollections()}; await saveRemoteState(); } }
 
         // ===== AUTH =====
         async function checkAuth() { const { data } = await sb.auth.getSession(); const logged = data.session && data.session.user.email === ADMIN_EMAIL; const loginView = document.getElementById('login-view'); const dashView = document.getElementById('dashboard-view'); if (logged) { try { await loadRemoteState(); loginView.classList.add('hidden'); dashView.classList.remove('hidden'); initDashboard(); } catch (e) { document.getElementById('login-error').textContent='Database connection failed: '+e.message; document.getElementById('login-error').classList.remove('hidden'); } } else { loginView.classList.remove('hidden'); dashView.classList.add('hidden'); } }
@@ -1224,26 +1253,28 @@
             openProductModal(true);
         }
 
-        function duplicateProduct(id) {
+        async function duplicateProduct(id) {
             const p = getProducts().find(prod => prod.id === id);
             if (!p) return;
             const newProd = { ...p, id: Date.now().toString(), name: p.name + ' (Copy)', createdAt: Date.now() };
-            const products = getProducts();
-            products.push(newProd);
-            saveProducts(products);
-            loadProductsTable();
-            loadOverview();
-            showToast('Product duplicated successfully');
+            try {
+                await insertProductRow(newProd);
+                remoteState.products.unshift(newProd);
+                loadProductsTable();
+                loadOverview();
+                showToast('Product duplicated successfully');
+            } catch (e) { showToast('Database save failed: '+e.message, true); }
         }
 
         function deleteProduct(id) {
-            showConfirm('Delete Perfume?', 'This will permanently delete this perfume from your store. This action cannot be undone.', () => {
-                let products = getProducts();
-                products = products.filter(p => p.id !== id);
-                saveProducts(products);
-                loadProductsTable();
-                loadOverview();
-                showToast('Product deleted');
+            showConfirm('Delete Perfume?', 'This will permanently delete this perfume from your store. This action cannot be undone.', async () => {
+                try {
+                    await deleteProductRow(id);
+                    remoteState.products = remoteState.products.filter(p => p.id !== id);
+                    loadProductsTable();
+                    loadOverview();
+                    showToast('Product deleted');
+                } catch (e) { showToast('Database delete failed: '+e.message, true); }
             });
         }
 
@@ -1265,7 +1296,7 @@
             catch (err) { showToast('Image upload failed: ' + err.message, true); e.target.value = ''; }
         });
 
-        document.getElementById('product-form').addEventListener('submit', (e) => {
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('product-id').value || Date.now().toString();
             const isEdit = !!document.getElementById('product-id').value;
@@ -1308,18 +1339,20 @@
                 return;
             }
 
-            let products = getProducts();
-            if (isEdit) {
-                products = products.map(p => p.id === id ? product : p);
-            } else {
-                products.push(product);
-            }
-            saveProducts(products);
-            closeProductModal();
-            loadProductsTable();
-            loadOverview();
-            loadImagesGrid();
-            showToast(isEdit ? 'Product updated successfully' : 'Product added successfully');
+            try {
+                if (isEdit) {
+                    await updateProductRow(product);
+                    remoteState.products = remoteState.products.map(p => p.id === id ? product : p);
+                } else {
+                    await insertProductRow(product);
+                    remoteState.products.unshift(product);
+                }
+                closeProductModal();
+                loadProductsTable();
+                loadOverview();
+                loadImagesGrid();
+                showToast(isEdit ? 'Product updated successfully' : 'Product added successfully');
+            } catch (e) { showToast('Database save failed: '+e.message, true); }
         });
 
         // ===== HOMEPAGE =====
