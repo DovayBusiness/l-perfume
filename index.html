@@ -824,12 +824,13 @@
 
         // Supabase-backed shared state with local defaults as a safe fallback.
         const sb = window.supabase?.createClient(window.REFFIME_SUPABASE_URL, window.REFFIME_SUPABASE_ANON_KEY);
+        const STORE_ID = window.REFFIME_STORE_ID;
         let remoteState = null;
         function getSettings() { const s = remoteState?.settings || JSON.parse(localStorage.getItem('essence_settings') || 'null') || defaultSettings; return { ...defaultSettings, ...s }; }
         function getProducts() { return remoteState ? remoteState.products : (JSON.parse(localStorage.getItem('essence_products') || 'null') || defaultProducts); }
         function getReviews() { return remoteState ? remoteState.reviews : (JSON.parse(localStorage.getItem('essence_reviews') || 'null') || defaultReviews); }
         function getCollections() { return remoteState ? remoteState.collections : (JSON.parse(localStorage.getItem('essence_collections') || 'null') || defaultCollections); }
-        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id','main').maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderCategoryFilters(); renderProducts('all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
+        async function loadRemoteState() { try { if (!sb) return; const { data, error } = await sb.from('lperfume_state').select('*').eq('id',STORE_ID).maybeSingle(); if (error) { console.warn('Reffime data load failed', error); return; } if (data) { remoteState = { settings: data.settings || {}, products: data.products || [], reviews: data.reviews || [], collections: data.collections || [] }; renderSettings(); renderCollections(); renderCategoryFilters(); renderProducts('all'); renderReviews(); } } finally { document.documentElement.classList.remove('data-loading'); } }
 
         // ===== RENDERING =====
         function renderCollections() {
@@ -1166,7 +1167,7 @@
             setTimeout(() => toast.classList.add('hidden'), 3000);
         }
 
-        document.getElementById('review-submit-form').addEventListener('submit', async (e) => { e.preventDefault(); const msg=document.getElementById('review-submit-message'); const payload={customer_name:document.getElementById('review-name').value.trim(),location:document.getElementById('review-location').value.trim()||'Lagos, Nigeria',rating:Number(document.getElementById('review-rating').value),review_text:document.getElementById('review-text').value.trim()}; if(!sb){msg.textContent='Reviews are temporarily unavailable.';msg.className='text-[12px] md:col-span-2 text-red-600';return} const {error}=await sb.from('lperfume_review_submissions').insert(payload); if(error){msg.textContent='We could not submit your review. Please try again.';msg.className='text-[12px] md:col-span-2 text-red-600';return} e.target.reset();msg.textContent='Thank you. Your review is pending approval.';msg.className='text-[12px] md:col-span-2 text-green-700'; });
+        document.getElementById('review-submit-form').addEventListener('submit', async (e) => { e.preventDefault(); const msg=document.getElementById('review-submit-message'); const payload={store_id:STORE_ID,customer_name:document.getElementById('review-name').value.trim(),location:document.getElementById('review-location').value.trim()||'Lagos, Nigeria',rating:Number(document.getElementById('review-rating').value),review_text:document.getElementById('review-text').value.trim()}; if(!sb){msg.textContent='Reviews are temporarily unavailable.';msg.className='text-[12px] md:col-span-2 text-red-600';return} const {error}=await sb.from('lperfume_review_submissions').insert(payload); if(error){msg.textContent='We could not submit your review. Please try again.';msg.className='text-[12px] md:col-span-2 text-red-600';return} e.target.reset();msg.textContent='Thank you. Your review is pending approval.';msg.className='text-[12px] md:col-span-2 text-green-700'; });
 
         // Intersection Observer for fade-ins
         const observer = new IntersectionObserver((entries) => {
