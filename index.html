@@ -833,7 +833,7 @@
             if (error) { console.warn('Feature flag load failed', error); return; }
             if (data) storeFeatures = data;
             if (!storeFeatures.feature_whatsapp) {
-                document.querySelectorAll('.whatsapp-order-btn').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.whatsapp-order-btn').forEach(el => el.remove());
             }
             if (!storeFeatures.feature_reviews) {
                 const reviewsSection = document.getElementById('reviews-section');
@@ -914,7 +914,7 @@
                                 <button onclick="openProductModal('${product.id}')" class="w-9 h-9 border border-beige flex items-center justify-center hover:bg-black-luxe hover:text-cream hover:border-black-luxe transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </button>
-                                <button onclick="openWhatsAppOrder('${product.id}')" class="whatsapp-order-btn bg-black-luxe text-cream px-4 h-9 text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-charcoal transition-colors">Order</button>
+                                ${storeFeatures.feature_whatsapp ? `<button onclick="openWhatsAppOrder('${product.id}')" class="bg-black-luxe text-cream px-4 h-9 text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-charcoal transition-colors">Order</button>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1037,7 +1037,7 @@
                     </div>
 
                     <div class="flex gap-3">
-                        <button onclick="openWhatsAppOrder('${product.id}'); closeProductModal();" class="whatsapp-order-btn flex-1 bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-charcoal transition-colors">Order on WhatsApp</button>
+                        ${storeFeatures.feature_whatsapp ? `<button onclick="openWhatsAppOrder('${product.id}'); closeProductModal();" class="flex-1 bg-black-luxe text-cream py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-charcoal transition-colors">Order on WhatsApp</button>` : ''}
                         <button onclick="closeProductModal()" class="px-8 border border-beige py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:border-black-luxe transition-colors">Close</button>
                     </div>
                 </div>
@@ -1204,14 +1204,14 @@
         }, { threshold: 0.1 });
 
         // Init
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             renderSettings();
             renderCollections();
             renderCategoryFilters();
-            renderProducts('all');
             renderReviews();
+            await loadStoreFeatures();
+            renderProducts('all');
             loadRemoteState();
-            loadStoreFeatures();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
             // Listen for storage changes from admin
