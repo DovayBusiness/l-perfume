@@ -107,6 +107,9 @@
                 <button data-view="overview" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 bg-cream text-black-luxe">
                     <span>◫</span> Overview
                 </button>
+                <button data-view="categories" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
+                    <span>◫</span> Categories
+                </button>
                 <button data-view="products" class="nav-btn w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase flex items-center gap-3 text-cream/60 hover:text-cream hover:bg-cream/10 transition-colors">
                     <span>◫</span> Products
                 </button>
@@ -149,6 +152,7 @@
                 </div>
                 <nav class="flex-1 space-y-1">
                     <button data-view="overview" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase bg-cream text-black-luxe">Overview</button>
+                    <button data-view="categories" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Categories</button>
                     <button data-view="products" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Products</button>
                     <button data-view="homepage" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Homepage</button>
                     <button data-view="reviews" class="nav-btn-mobile w-full text-left px-4 py-3 text-[12px] tracking-[0.15em] uppercase text-cream/60">Reviews</button>
@@ -231,6 +235,29 @@
                 </section>
 
                 <!-- Products -->
+                <!-- Categories -->
+                <section id="view-categories" class="view-section hidden p-6 lg:p-10">
+                    <div class="mb-8">
+                        <p class="text-gold text-[11px] tracking-[0.4em] uppercase mb-2">Organize</p>
+                        <h1 class="font-serif text-[32px] lg:text-[40px] font-light">Category Management</h1>
+                    </div>
+
+                    <div class="bg-white border border-beige p-6 mb-6">
+                        <p class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-4">Add New Category</p>
+                        <div class="grid sm:grid-cols-2 gap-4 items-start">
+                            <input id="new-category-name" class="input-field" placeholder="Category name">
+                            <div>
+                                <input id="new-category-image-file" type="file" accept="image/*" class="text-[12px]">
+                                <img id="new-category-image-preview" class="hidden w-20 h-20 object-cover mt-2" alt="">
+                            </div>
+                        </div>
+                        <button id="add-category-btn" class="mt-4 bg-gold text-black-luxe px-6 py-3 text-[11px] tracking-[0.2em] uppercase font-medium">Add Category</button>
+                    </div>
+
+                    <div id="edit-collections-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <p class="text-[11px] text-black/40 mt-4">Renaming a category does not update products already assigned to the old name.</p>
+                </section>
+
                 <section id="view-products" class="view-section hidden p-6 lg:p-10">
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
                         <div>
@@ -244,12 +271,6 @@
                         <input id="product-search" type="text" placeholder="Search products, brands, categories..." class="input-field flex-1">
                         <select id="product-category-filter" class="input-field lg:w-[200px]">
                             <option value="all">All Categories</option>
-                            <option>Women's Perfumes</option>
-                            <option>Men's Perfumes</option>
-                            <option>Unisex Fragrances</option>
-                            <option>Perfume Oils</option>
-                            <option>Body Sprays</option>
-                            <option>Gift Sets</option>
                         </select>
                         <select id="product-status-filter" class="input-field lg:w-[160px]">
                             <option value="all">All Status</option>
@@ -310,12 +331,9 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="label">Hero Background Image URL</label>
-                                        <input id="edit-hero-image" type="url" class="input-field">
-                                        <div class="mt-3 flex gap-3">
-                                            <input type="file" id="hero-image-file" accept="image/*" class="text-[12px]">
-                                            <span class="text-[11px] text-black/50">or upload image</span>
-                                        </div>
+                                        <label class="label">Hero Background Image</label>
+                                        <input id="edit-hero-image" type="hidden">
+                                        <input type="file" id="hero-image-file" accept="image/*" class="text-[12px]">
                                         <img id="preview-hero-image" class="mt-3 w-full h-40 object-cover border border-beige hidden">
                                     </div>
                                 </div>
@@ -342,8 +360,9 @@
                                         <input id="edit-promo-button" type="text" class="input-field">
                                     </div>
                                     <div>
-                                        <label class="label">Promo Background Image URL</label>
-                                        <input id="edit-promo-image" type="url" class="input-field"><input type="file" id="promo-image-file" accept="image/*" class="text-[12px] mt-2"><span class="text-[11px] text-black/50">or upload an optimized image</span>
+                                        <label class="label">Promo Background Image</label>
+                                        <input id="edit-promo-image" type="hidden">
+                                        <input type="file" id="promo-image-file" accept="image/*" class="text-[12px]">
                                         <img id="preview-promo-image" class="mt-3 w-full h-32 object-cover border border-beige hidden">
                                     </div>
                                 </div>
@@ -361,7 +380,8 @@
                                         <label class="label">About Description (paragraphs separated by blank line)</label>
                                         <textarea id="edit-about-description" rows="6" class="input-field"></textarea>
                                         <label class="label mt-4">About Image</label>
-                                        <input id="edit-about-image" type="url" class="input-field" placeholder="Image URL"><input type="file" id="about-image-file" accept="image/*" class="text-[12px] mt-2"><span class="text-[11px] text-black/50">Upload an optimized image or use a URL</span>
+                                        <input id="edit-about-image" type="hidden">
+                                        <input type="file" id="about-image-file" accept="image/*" class="text-[12px]">
                                         <img id="preview-about-image" class="mt-3 w-full h-40 object-cover border border-beige hidden">
                                     </div>
                                     <div class="grid grid-cols-3 gap-3"><div><label class="label">Stat 1 value</label><input id="edit-about-stat1-value" class="input-field"></div><div class="col-span-2"><label class="label">Stat 1 label</label><input id="edit-about-stat1-label" class="input-field"></div><div><label class="label">Stat 2 value</label><input id="edit-about-stat2-value" class="input-field"></div><div class="col-span-2"><label class="label">Stat 2 label</label><input id="edit-about-stat2-label" class="input-field"></div><div><label class="label">Stat 3 value</label><input id="edit-about-stat3-value" class="input-field"></div><div class="col-span-2"><label class="label">Stat 3 label</label><input id="edit-about-stat3-label" class="input-field"></div></div>
@@ -395,11 +415,6 @@
                                 <h4 class="font-serif text-[18px] mb-3">Live Preview</h4>
                                 <p class="text-cream/60 text-[13px] leading-[1.6] mb-4">Changes are saved instantly to local storage and reflected on the public site. Open the store in a new tab to verify.</p>
                                 <a href="index.html" target="_blank" class="block w-full bg-cream text-black-luxe py-3 text-[11px] tracking-[0.2em] uppercase text-center">Open Store →</a>
-                            </div>
-                            <div class="bg-white border border-beige p-6">
-                                <h4 class="text-[11px] tracking-[0.2em] uppercase text-black/50 mb-4">Collections</h4>
-                                <div id="edit-collections-list" class="space-y-3"></div><button id="save-collection-images-btn" class="mt-4 bg-black-luxe text-cream px-5 py-3 text-[11px] tracking-[0.2em] uppercase">Save Collection Images</button>
-                                <p class="text-[11px] text-black/40 mt-4">Change each category background image by URL or upload an optimized image.</p>
                             </div>
                             <button id="save-homepage-btn" class="w-full bg-gold text-black-luxe py-4 text-[12px] tracking-[0.2em] uppercase font-medium hover:bg-gold-dark transition-colors">Save All Changes</button>
                             <button id="reset-homepage-btn" class="w-full border border-beige py-3 text-[11px] tracking-[0.2em] uppercase">Reset to Defaults</button>
@@ -557,12 +572,6 @@
                                     <label class="label">Category *</label>
                                     <select id="p-category" required class="input-field">
                                         <option value="">Select Category</option>
-                                        <option>Women's Perfumes</option>
-                                        <option>Men's Perfumes</option>
-                                        <option>Unisex Fragrances</option>
-                                        <option>Perfume Oils</option>
-                                        <option>Body Sprays</option>
-                                        <option>Gift Sets</option>
                                     </select>
                                 </div>
                                 <div>
@@ -629,9 +638,8 @@
                                 <label class="label">Product Image *</label>
                                 <div class="border border-dashed border-beige p-4 bg-white">
                                     <img id="p-image-preview" src="" class="w-full h-48 object-cover border border-beige mb-3 hidden">
-                                    <input id="p-image" type="url" class="input-field mb-3" placeholder="https://... image URL">
+                                    <input id="p-image" type="hidden">
                                     <div class="text-center">
-                                        <p class="text-[11px] text-black/40 mb-2">OR UPLOAD FILE</p>
                                         <input type="file" id="p-image-file" accept="image/*" class="text-[12px] w-full">
                                         <p class="text-[10px] text-black/40 mt-2">Max 2MB, optimized automatically</p>
                                     </div>
@@ -1088,6 +1096,7 @@
 
             // Load view data
             if (viewName === 'overview') loadOverview();
+            if (viewName === 'categories') renderCategoriesTab();
             if (viewName === 'products') loadProductsTable();
             if (viewName === 'homepage') loadHomepageForm();
             if (viewName === 'reviews') loadReviewsList();
@@ -1374,7 +1383,6 @@
         // ===== HOMEPAGE =====
         function loadHomepageForm() {
             const s = getSettings();
-            const collections = getCollections();
             document.getElementById('edit-hero-headline').value = s.heroHeadline;
             document.getElementById('edit-hero-description').value = s.heroDescription;
             document.getElementById('edit-hero-btn1').value = s.heroButton1Text;
@@ -1403,18 +1411,102 @@
             const promoPreview = document.getElementById('preview-promo-image');
             promoPreview.src = s.promoBackgroundImage;
             promoPreview.classList.remove('hidden');
+        }
 
-            // Collections
+        // ===== CATEGORIES =====
+        function renderCategoriesTab() {
+            const collections = getCollections();
             document.getElementById('edit-collections-list').innerHTML = collections.map(c => `
-                <div class="p-3 border border-beige bg-cream-dark" data-collection-id="${c.id}">
-                    <div class="flex items-center gap-3"><img src="${c.image}" class="w-14 h-14 object-cover"><div class="flex-1"><p class="text-[12px] font-medium">${c.name}</p><p class="text-[10px] text-black/50">${getProducts().filter(p=>p.category===c.name).length} products</p></div></div>
-                    <input class="collection-image-url input-field mt-2" data-id="${c.id}" value="${c.image || ''}" placeholder="Image URL"><input type="file" class="collection-image-file text-[12px] mt-2" data-id="${c.id}" accept="image/*">
+                <div class="bg-white border border-beige p-4" data-collection-id="${c.id}">
+                    <img src="${c.image || ''}" class="w-full h-32 object-cover border border-beige mb-3 ${c.image ? '' : 'hidden'}">
+                    <input class="collection-name input-field mb-2" data-id="${c.id}" value="${c.name || ''}" placeholder="Category name">
+                    <p class="text-[10px] text-black/50 mb-2">${getProducts().filter(p=>p.category===c.name).length} products</p>
+                    <input type="file" class="collection-image-file text-[12px] w-full mb-2" data-id="${c.id}" accept="image/*">
+                    <button class="delete-category-btn w-full text-red-600 text-[11px] uppercase border border-red-200 px-3 py-2" data-id="${c.id}">Delete</button>
                 </div>
             `).join('');
         }
-
-        document.getElementById('save-collection-images-btn').addEventListener('click', () => { const cols=getCollections().map(c=>{const input=document.querySelector(`.collection-image-url[data-id="${c.id}"]`);return {...c,image:input?.value.trim()||c.image};}); saveCollections(cols); loadHomepageForm(); showToast('Collection images saved'); });
-        document.getElementById('edit-collections-list').addEventListener('change', async (e) => { if(!e.target.classList.contains('collection-image-file'))return; const file=e.target.files[0]; if(!file)return; try{showToast('Uploading collection image...');const url=await uploadSiteImage(file,'collections');const input=document.querySelector(`.collection-image-url[data-id="${e.target.dataset.id}"]`);input.value=url;showToast('Collection image uploaded; click Save Collection Images');}catch(err){showToast('Image upload failed: '+err.message,true);e.target.value='';} });
+        document.getElementById('edit-collections-list').addEventListener('change', async (e) => {
+            if (e.target.classList.contains('collection-image-file')) {
+                const file = e.target.files[0]; if (!file) return;
+                try {
+                    showToast('Uploading category image...');
+                    const url = await uploadSiteImage(file, 'collections');
+                    const cols = getCollections().map(c => c.id === e.target.dataset.id ? { ...c, image: url } : c);
+                    saveCollections(cols);
+                    renderCategoriesTab();
+                    showToast('Category image saved');
+                } catch (err) { showToast('Image upload failed: ' + err.message, true); e.target.value = ''; }
+            }
+        });
+        document.getElementById('edit-collections-list').addEventListener('blur', (e) => {
+            if (!e.target.classList.contains('collection-name')) return;
+            const id = e.target.dataset.id;
+            const newName = e.target.value.trim();
+            if (!newName) return;
+            const cols = getCollections();
+            const cat = cols.find(c => c.id === id);
+            if (!cat || cat.name === newName) return;
+            cat.name = newName;
+            saveCollections(cols);
+            populateCategorySelect();
+            showToast('Category renamed');
+        }, true);
+        document.getElementById('edit-collections-list').addEventListener('click', (e) => {
+            if (!e.target.classList.contains('delete-category-btn')) return;
+            const id = e.target.dataset.id;
+            const cat = getCollections().find(c => c.id === id);
+            if (!cat) return;
+            const inUse = getProducts().filter(p => p.category === cat.name).length;
+            showConfirm('Delete Category?', inUse ? `${inUse} product(s) currently use "${cat.name}". They will keep that category text but it will no longer appear as a selectable category. This cannot be undone.` : `Delete "${cat.name}"? This cannot be undone.`, () => {
+                const cols = getCollections().filter(c => c.id !== id);
+                saveCollections(cols);
+                renderCategoriesTab();
+                populateCategorySelect();
+                showToast('Category deleted');
+            });
+        });
+        document.getElementById('new-category-image-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0]; if (!file) return;
+            try {
+                showToast('Uploading category image...');
+                const url = await uploadSiteImage(file, 'collections');
+                const preview = document.getElementById('new-category-image-preview');
+                preview.dataset.url = url; preview.src = url; preview.classList.remove('hidden');
+                showToast('Category image uploaded');
+            } catch (err) { showToast('Image upload failed: ' + err.message, true); e.target.value = ''; }
+        });
+        document.getElementById('add-category-btn').addEventListener('click', () => {
+            const name = document.getElementById('new-category-name').value.trim();
+            const image = document.getElementById('new-category-image-preview').dataset.url || '';
+            if (!name) { showToast('Enter a category name', true); return; }
+            const cols = getCollections();
+            if (cols.some(c => c.name.toLowerCase() === name.toLowerCase())) { showToast('That category already exists', true); return; }
+            cols.push({ id: 'cat-' + Date.now().toString(), name, image, count: 0 });
+            saveCollections(cols);
+            document.getElementById('new-category-name').value = '';
+            document.getElementById('new-category-image-file').value = '';
+            const preview = document.getElementById('new-category-image-preview');
+            preview.classList.add('hidden'); preview.removeAttribute('src'); delete preview.dataset.url;
+            renderCategoriesTab();
+            populateCategorySelect();
+            showToast('Category added');
+        });
+        function populateCategorySelect() {
+            const cats = getCollections();
+            const select = document.getElementById('p-category');
+            if (select) {
+                const current = select.value;
+                select.innerHTML = '<option value="">Select Category</option>' + cats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+                if (cats.some(c => c.name === current)) select.value = current;
+            }
+            const filter = document.getElementById('product-category-filter');
+            if (filter) {
+                const current = filter.value;
+                filter.innerHTML = '<option value="all">All Categories</option>' + cats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+                if (current === 'all' || cats.some(c => c.name === current)) filter.value = current;
+            }
+        }
         document.getElementById('edit-hero-image').addEventListener('input', (e) => {
             const img = document.getElementById('preview-hero-image');
             if (e.target.value) {
@@ -1676,6 +1768,7 @@
 
         // ===== INIT =====
         function initDashboard() {
+            populateCategorySelect();
             loadOverview();
             loadProductsTable();
             loadHomepageForm();
